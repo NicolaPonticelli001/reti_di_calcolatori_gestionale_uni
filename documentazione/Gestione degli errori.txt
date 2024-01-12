@@ -1,0 +1,26 @@
+In generale se qualcosa va a buon fine --> 0
+
+Errore:
+-Titolo: ""
+-Codice errore: 
+-Descrizione: ""
+
+Errore:
+-Titolo: "Richiesta non riconisciuta"
+-Codice errore: 1
+-Descrizione: "Il server non riconosce la richiesta da soddisfare per le operazioni previste dal sistema"
+
+Errore:
+-Descrizione: "Trasferimento non riuscito"
+-Codice errore: 2
+-Descrizione: "Il numero di byte inviati è diverso dal numero di byte ricevuti o viceversa"
+
+Errore:
+-Titolo: "Inserimento nel database non riuscito"
+-Codice errore: 3
+-Descrizione: "Il database ha riscontrato un errore mentre effettuava l'inserimento"
+
+Errore:
+-Titolo: "Select nel database non riuscita"
+-Codice errore: 4
+-Descrizione: "Il database ha riscontrato un errore mentre effettuava la select"
