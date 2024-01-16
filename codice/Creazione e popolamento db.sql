@@ -27,7 +27,7 @@ CREATE TABLE Esami(
     CONSTRAINT PK_Esami PRIMARY KEY(CodiceEsame),
     CONSTRAINT FK_Esami_Corsi FOREIGN KEY(CodiceCorso) REFERENCES Corsi(CodiceCorso)
 );
-INSERT INTO esami (CodiceEsame, CodiceCorso, Tipo, Modalita, Descrizione) VALUES ('1', '1', 'Esame', 'Orale', NULL),('2', '2', 'Esame', 'Orale', 'L\'esame orale è composto da due parti:\r\n-Discussione del progetto\r\n-Prova orale sugli argomenti del corso'), ('3', '3', 'Esame', 'Orale', 'L\'esame orale è composto da due parti:\r\n-Discussione del progetto\r\n-Prova orale sugli argomenti del corso'),('4', '5', 'Prova', 'Scritto', 'Prova scritta'), ('5', '5', 'Prova', 'Scritto', 'Prova pratica C++'),('6', '5', 'Esame', 'Orale', NULL), ('7', '1', 'Esame', 'Scritto', 'Per accedere alla prova orale bisogna superare la prova scritta'),('8', '4', 'Esame', 'Orale', NULL);
+INSERT INTO esami (CodiceEsame, CodiceCorso, Tipo, Modalita, Descrizione) VALUES ('1', '1', 'Esame', 'Orale', NULL),('2', '2', 'Esame', 'Orale', 'Esame orale composto da due parti:\r\n-Discussione del progetto\r\n-Prova orale sugli argomenti del corso'), ('3', '3', 'Esame', 'Orale', 'Esame orale composto da due parti:\r\n-Discussione del progetto\r\n-Prova orale sugli argomenti del corso'),('4', '5', 'Prova', 'Scritto', 'Prova scritta'), ('5', '5', 'Prova', 'Scritto', 'Prova pratica C++'),('6', '5', 'Esame', 'Orale', NULL), ('7', '1', 'Esame', 'Scritto', 'Per accedere alla prova orale bisogna superare la prova scritta'),('8', '4', 'Esame', 'Orale', NULL);
 
 CREATE TABLE Appelli(
     CodiceAppello INT AUTO_INCREMENT,
