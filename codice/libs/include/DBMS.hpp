@@ -12,7 +12,7 @@ private:
     int error_connection_db;
     vector< map<string, string> > table_results;
 
-    static int elaborateResults(void*, int, char**, char**);
+    void elaborateResults(int, char**, char**);
     void executeQuery(string, Error*);
 public:
     DBMS(string, Error* = NULL);

@@ -24,25 +24,11 @@ DBMS::~DBMS() {
 }
 
 vector< map<string, string> > DBMS::select(string sql, Error *error = nullptr) {
-    char *temp_error;
-    int temp_code;
-
-    temp_code = sqlite3_exec(this->db, sql.c_str(), &DBMS::elaborateResults, &this->table_results, &temp_error);
     
-    if(error != NULL) {
-        if (temp_code == 0) error->setCode(OK);
-        else {
-            error->setCode(SELECT_ERROR);
-            error->setTitle("SQL "+temp_code);
-            error->setDescription(temp_error);
-        }
-    }
-
     return this->table_results;
 }
 
-int DBMS::elaborateResults(void *additional_data, int count_data, char **data, char **column) {
-    vector< map<string, string> > *table_results = (vector< map<string, string> >*)additional_data;
+void DBMS::elaborateResults(void *additional_data, int count_data, char **data, char **column) {
     map<string, string> record;
 
 
@@ -69,19 +55,12 @@ void DBMS::executeQuery(string sql, Error *error = NULL) {
                 error->setAll(SELECT_ERROR, "SQL " + temp_error, "Error while preparing the statement - sqlite3_prepare_v2()");
             }
         } else {
-            temp_error = sqlite3_bind_text(statement, 1, parametro.c_str(), -1, SQLITE_STATIC);
-            if (temp_error != SQLITE_OK) {
-                if (error != nullptr) {
-                    error->setAll(SELECT_ERROR, "SQL " + temp_error, "Error while binding - sqlite3_bind_text()");  
-                }
-            } else {
-                while ((temp_error = sqlite3_step(statement)) == SQLITE_ROW) {
+            while ((temp_error = sqlite3_step(statement)) == SQLITE_ROW) {
 
-                }
-                if (temp_error != SQLITE_DONE) {
-                    if (error != nullptr) {
-                        error->setAll(SELECT_ERROR, "SQL " + temp_error, "Error while obtaining rows - sqlite3_bind_text()");
-                    }
+            }
+            if (temp_error != SQLITE_DONE) {
+                if (error != nullptr) {
+                    error->setAll(SELECT_ERROR, "SQL " + temp_error, "Error while obtaining rows - sqlite3_bind_text()");
                 }
             }
         }
