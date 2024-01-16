@@ -31,5 +31,5 @@ string Error::getDescription() {return this->description;}
 void Error::printError() {
     cout << "ERRORE" << endl;
     cout << "Codice: " << this->code << endl;
-    cout << this->title << ": " << this->description << endl;
+    if (this->code != OK) cout << this->title << ": " << this->description << endl;
 }

@@ -3,46 +3,30 @@
 
 using namespace std;
 
-DBMS::DBMS(string db_name, Error *error = NULL) {
+DBMS::DBMS(string db_name, Error *error) {
     int error_temp;
     error_temp = sqlite3_open(db_name.c_str(), &this->db);
-    if(error_temp != SQLITE_OK) {
-        if (error_temp == 0) error->setCode(OK);
-        else {
-            error->setCode(GENERIC);
-            error->setTitle("SQLite connect " + error_temp);
-            error->setDescription("Error while connecting to database \"" + db_name + "\"");
-        }
+    if (error != nullptr) {
+        if (error_temp == SQLITE_OK) error->setCode(OK);
+        else error->setAll(GENERIC, "SQLite connect " + error_temp, "Error while connecting to database \"" + db_name + "\"");
     }
 
     this->error_connection_db = error_temp;
-    this->table_results = vector< map<string, string> >();
 }
 
 DBMS::~DBMS() {
     sqlite3_close(this->db);
 }
 
-vector< map<string, string> > DBMS::select(string sql, Error *error = nullptr) {
-    
-    return this->table_results;
+vector< map<string, string> >* DBMS::select(string sql, Error *error) {
+    vector< map<string, string> > *table_results = new vector< map<string, string> >();
+    this->executeQuery(sql, error, table_results);
+    return table_results;
 }
 
-void DBMS::elaborateResults(void *additional_data, int count_data, char **data, char **column) {
-    map<string, string> record;
-
-
-    for(int i = 0; i < count_data; i++) {
-        record[column[i]] = data[i];
-    }
-
-    table_results->push_back(record);
-}
-
-void DBMS::executeQuery(string sql, Error *error = NULL) {
+void DBMS::executeQuery(string sql, Error *error = nullptr, vector< map<string, string> > *table_result) {
     sqlite3_stmt *statement;
     int temp_error;
-    char *temp_msg;
 
     if (this->error_connection_db != SQLITE_OK) {
         if (error != nullptr) {
@@ -55,18 +39,32 @@ void DBMS::executeQuery(string sql, Error *error = NULL) {
                 error->setAll(SELECT_ERROR, "SQL " + temp_error, "Error while preparing the statement - sqlite3_prepare_v2()");
             }
         } else {
-            while ((temp_error = sqlite3_step(statement)) == SQLITE_ROW) {
 
-            }
-            if (temp_error != SQLITE_DONE) {
-                if (error != nullptr) {
-                    error->setAll(SELECT_ERROR, "SQL " + temp_error, "Error while obtaining rows - sqlite3_bind_text()");
-                }
+            if (table_result != nullptr) {
+                this->createMapResults(table_result, statement, error);
             }
         }
     }
 
     sqlite3_finalize(statement);
     return;
+}
 
+void DBMS::createMapResults(vector< map<string, string> > *table_results, sqlite3_stmt *statement, Error *error) {
+    map<string, string> row;
+    int temp_error;
+
+    while ((temp_error = sqlite3_step(statement)) == SQLITE_ROW) {
+        const char *value;
+        for (int i = 0; i < sqlite3_column_count(statement); i++) {
+            value = reinterpret_cast<const char*>(sqlite3_column_text(statement, i));
+            row[sqlite3_column_name(statement, i)] = (value == nullptr ? "" : value);
+        }
+        table_results->push_back(row);
+    }
+    if (temp_error != SQLITE_DONE) {
+        if (error != nullptr) {
+            error->setAll(SELECT_ERROR, "SQL " + temp_error, "Error while obtaining rows - sqlite3_bind_text()");
+        }
+    }
 }

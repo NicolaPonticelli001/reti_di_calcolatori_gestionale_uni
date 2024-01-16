@@ -14,7 +14,7 @@ enum ErrorType {
 class Error {
 private:
     ErrorType code;
-    char title[30], description[100];
+    char title[50], description[500];
 
 public:
     Error();

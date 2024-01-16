@@ -10,14 +10,12 @@ class DBMS {
 private:
     sqlite3 *db;
     int error_connection_db;
-    vector< map<string, string> > table_results;
 
-    void elaborateResults(int, char**, char**);
-    void executeQuery(string, Error*);
+    void createMapResults(vector< map<string, string> >*, sqlite3_stmt*, Error* = nullptr);
+    void executeQuery(string, Error*, vector< map<string, string> >* = nullptr);
 public:
-    DBMS(string, Error* = NULL);
+    DBMS(string, Error* = nullptr);
     ~DBMS();
 
-    void connectDb(string, Error* = NULL);
-    vector< map<string, string> > select(string, Error* = NULL);
+    vector< map<string, string> >* select(string, Error* = nullptr);
 };
