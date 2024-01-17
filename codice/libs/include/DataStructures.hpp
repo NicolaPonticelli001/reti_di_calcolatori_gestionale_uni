@@ -26,7 +26,7 @@ enum ErrorType {
 };
 
 //Struttura utilizzata come pacchetto per inviare la richiesta e ricevere risposte dal server ed eventuali errori
-struct packet{
+struct Packet{
     RequestType request;
     Error error;
     int data[4];
