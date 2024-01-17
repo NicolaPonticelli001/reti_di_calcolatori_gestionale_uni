@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <sqlite3.h>
+#include "libs/include/DataStructures.hpp"
 #include "libs/include/DBMS.hpp"
 
 using namespace std;

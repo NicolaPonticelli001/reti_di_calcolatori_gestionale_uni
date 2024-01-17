@@ -11,11 +11,12 @@ private:
     sqlite3 *db;
     int error_connection_db;
 
-    void createMapResults(vector< map<string, string> >*, sqlite3_stmt*, Error* = nullptr);
-    void executeQuery(string, Error*, vector< map<string, string> >* = nullptr);
+    void createMapResults(vector< map<string, string> > *, sqlite3_stmt*, Error* = nullptr);
+    void executeQuery(string sql, Error *error, vector< map<string, string> >* = nullptr);
 public:
-    DBMS(string, Error* = nullptr);
+    DBMS(string db_name, Error *error = nullptr);
     ~DBMS();
 
-    vector< map<string, string> >* select(string, Error* = nullptr);
+    vector< map<string, string> >* select(string sql, Error *error = nullptr);
+    void insert(string sql, Error *error = nullptr);
 };
