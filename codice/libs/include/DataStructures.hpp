@@ -10,7 +10,8 @@ enum ErrorType {
     NOT_TRANSFER,   //2
     INSERT_ERROR,   //3
     SELECT_ERROR,   //4
-    GENERIC         //5
+    AUTH_ERROR,     //5
+    GENERIC         //6
 };
 
 class Error {
