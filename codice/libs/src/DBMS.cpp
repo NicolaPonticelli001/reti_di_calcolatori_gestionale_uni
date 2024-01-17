@@ -36,7 +36,7 @@ void DBMS::executeQuery(string sql, Error *error = nullptr, vector< map<string, 
         temp_error = sqlite3_prepare_v2(this->db, sql.c_str(), -1, &statement, nullptr);
         if (temp_error != SQLITE_OK) {
             if (error != nullptr) {
-                error->setAll(SELECT_ERROR, "SQL " + temp_error, "Error while preparing the statement - sqlite3_prepare_v2()");
+                error->setAll(SELECT_ERROR, "SQL " + temp_error, sqlite3_errmsg(this->db));
             }
         } else {
 
@@ -64,7 +64,7 @@ void DBMS::createMapResults(vector< map<string, string> > *table_results, sqlite
     }
     if (temp_error != SQLITE_DONE) {
         if (error != nullptr) {
-            error->setAll(SELECT_ERROR, "SQL " + temp_error, "Error while obtaining rows - sqlite3_bind_text()");
+            error->setAll(SELECT_ERROR, "SQL " + temp_error, sqlite3_errmsg(this->db));
         }
     }
 }
