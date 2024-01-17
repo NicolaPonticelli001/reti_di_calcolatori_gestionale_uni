@@ -68,3 +68,7 @@ void DBMS::createMapResults(vector< map<string, string> > *table_results, sqlite
         }
     }
 }
+
+void DBMS::insert(string sql, Error *error) {
+    this->executeQuery(sql, error);
+}
