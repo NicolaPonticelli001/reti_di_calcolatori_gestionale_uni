@@ -9,7 +9,7 @@ using namespace std;
 #define MATRICOLA_STUDENTE 0
 #define APPELLO 1
 #define RIGHE_QUERY 2
-#define GENERIC 3   //Per il numero progressivo
+#define GENERIC_DATA 3   //Per il numero progressivo
 
 //Enumerazione per identificare il tipo di richiesta
 enum RequestType{
