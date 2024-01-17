@@ -5,6 +5,12 @@
 
 using namespace std;
 
+//Defines per accedere direttamente al campo "data" della struct "Packet"
+#define MATRICOLA_STUDENTE 0
+#define APPELLO 1
+#define RIGHE_QUERY 2
+#define GENERIC 3   //Per il numero progressivo
+
 //Enumerazione per identificare il tipo di richiesta
 enum RequestType{
     LOGIN,          //0
