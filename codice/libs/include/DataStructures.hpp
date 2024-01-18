@@ -2,6 +2,7 @@
 #define DATASTRUCTURES_HPP
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -31,13 +32,6 @@ enum ErrorType {
     GENERIC         //6
 };
 
-//Struttura utilizzata come pacchetto per inviare la richiesta e ricevere risposte dal server ed eventuali errori
-struct Packet{
-    RequestType request;
-    Error error;
-    int data[4];
-};
-
 //Classe che rappresenta l'errore che si è verificato dopo una richiesta
 class Error {
     private:
@@ -58,6 +52,13 @@ class Error {
         void setDescription(string);
         string getDescription();
         void printError();
+};
+
+//Struttura utilizzata come pacchetto per inviare la richiesta e ricevere risposte dal server ed eventuali errori
+struct Packet{
+    RequestType request = LOGIN;
+    Error error;
+    int data[4];
 };
 
 //Stutture utilizzate per le tabelle

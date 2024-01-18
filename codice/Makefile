@@ -1,41 +1,35 @@
-# Nome del programma
-TARGET = server_uni
-
-# Compilatore C++
+# Specifica il compilatore
 CXX = g++
+# Opzioni per il compilatore
+CXXFLAGS = -Wall -std=c++11
 
-# Opzioni di compilazione
-CXXFLAGS = -std=c++11 -Wall
+# Percorsi delle cartelle
+SRCDIR = .
+LIBDIR = ./libs
+INCLUDEDIR = $(LIBDIR)/include
+OBJDIR = $(LIBDIR)/obj
 
-# Librerie da collegare
-LDLIBS = -lsqlite3
+# Ottieni tutti i file main nella cartella "codice"
+SOURCES = $(wildcard $(SRCDIR)/*.cpp)
+# Genera i nomi degli eseguibili
+EXECUTABLES = $(patsubst $(SRCDIR)/%.cpp,%,$(SOURCES))
 
-# Directory per i file header (.hpp)
-INC_DIR = libs/include
+# Ottieni tutti i file .cpp presenti nella cartella "libs/src"
+LIBSOURCES = $(wildcard $(LIBDIR)/src/*.cpp)
+# Genera i nomi dei file .o corrispondenti
+LIBOBJECTS = $(patsubst $(LIBDIR)/src/%.cpp,$(OBJDIR)/%.o,$(LIBSOURCES))
 
-# Directory per i file di implementazione (.cpp)
-SRC_DIR = libs/src
+# Target predefinito
+all: $(EXECUTABLES)
 
-# Directory per i file oggetto (.o)
-OBJ_DIR = libs/obj
+# Regola generica per la compilazione degli eseguibili
+$(EXECUTABLES): % : $(SRCDIR)/%.cpp $(LIBOBJECTS)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDEDIR) $< $(LIBOBJECTS) -lsqlite3 -o $@
 
-# Trova tutti i file sorgente (.cpp) nella directory SRC_DIR
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+# Regola per la compilazione dei file .o delle librerie
+$(OBJDIR)/%.o: $(LIBDIR)/src/%.cpp
+	$(CXX) $(CXXFLAGS) -I$(INCLUDEDIR) -c $< -o $@
 
-# Genera la lista dei file oggetto (.o) basata sui file sorgente
-OBJECTS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SOURCES))
-
-# Aggiungi il file principale al programma
-SOURCES += server_uni.cpp
-
-# Regola per generare l'eseguibile
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS) $(LDLIBS)
-
-# Regola generica per generare i file oggetto
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(INC_DIR)/%.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ -I$(INC_DIR)
-
-# Pulizia dei file intermedi e dell'eseguibile
+# Pulisci tutti gli eseguibili e i file .o
 clean:
-	rm -f $(TARGET) $(OBJECTS)
+	rm -f $(EXECUTABLES) $(OBJDIR)/*.o
