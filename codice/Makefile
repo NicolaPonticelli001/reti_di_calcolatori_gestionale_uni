@@ -22,6 +22,9 @@ LIBOBJECTS = $(patsubst $(LIBDIR)/src/%.cpp,$(OBJDIR)/%.o,$(LIBSOURCES))
 # Target predefinito
 all: $(EXECUTABLES)
 
+# Aggiungi "clean" come dipendenza di "all"
+all: clean
+
 # Regola generica per la compilazione degli eseguibili
 $(EXECUTABLES): % : $(SRCDIR)/%.cpp $(LIBOBJECTS)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDEDIR) $< $(LIBOBJECTS) -lsqlite3 -o $@
@@ -32,4 +35,4 @@ $(OBJDIR)/%.o: $(LIBDIR)/src/%.cpp
 
 # Pulisci tutti gli eseguibili e i file .o
 clean:
-	rm -f $(EXECUTABLES) $(OBJDIR)/*.o
+	rm -f $(OBJDIR)/*.o

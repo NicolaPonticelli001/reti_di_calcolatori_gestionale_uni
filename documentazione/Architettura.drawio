@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-01-17T17:36:06.720Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.199 Electron/28.1.2 Safari/537.36" etag="9iIqyh5WrUEkHve4UG7E" version="22.1.18" type="device">
+<mxfile host="Electron" modified="2024-01-18T19:58:44.958Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.199 Electron/28.1.2 Safari/537.36" etag="KsF1R1rItN1CeGl0KRvi" version="22.1.18" type="device">
   <diagram name="Pagina-1" id="-4l7BPa5b6d8UpFndVd6">
-    <mxGraphModel dx="2191" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2431" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -401,8 +401,8 @@
         <mxCell id="9eVTK3MTQIEa-Sh05Ag--12" value="Visione appelli prenotati" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="1651" y="70" width="160" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="9eVTK3MTQIEa-Sh05Ag--15" value="5. Query per ottenere il numero di iscritti ad un apello (per generare numero progressivo)&lt;br&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;SELECT CodiceAppello, COUNT(*) AS Numero_iscritti FROM prenotazioni&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;GROUP BY CodiceAppello&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;HAVING CodiceAppello = &amp;lt;id&amp;gt;;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;" parent="1" vertex="1">
-          <mxGeometry x="1005" y="1870" width="570" height="100" as="geometry" />
+        <mxCell id="9eVTK3MTQIEa-Sh05Ag--15" value="5. Query per ottenere il numero di iscritti ad un apello (per generare numero progressivo)&lt;br&gt;&lt;br&gt;&lt;div style=&quot;text-align: left;&quot;&gt;SELECT MAX(NumeroProgressivo) AS MaxNumero FROM prenotazioni&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;WHERE CodiceAppello = &amp;lt;id&amp;gt;;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="1005" y="1880" width="570" height="80" as="geometry" />
         </mxCell>
         <mxCell id="Fw5rg6So_1dUyEtNSrZ7-2" value="CODICE" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=114;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="40" y="1240" width="470" height="150" as="geometry" />
@@ -413,25 +413,25 @@
         <mxCell id="Fw5rg6So_1dUyEtNSrZ7-4" value="Header.h - Contiene varie intestazioni comuni a tutte le entità:&lt;br&gt;&lt;ul&gt;&lt;li&gt;&lt;b&gt;getAppelli&lt;/b&gt;: è la funzione che permette di ottenere tutti gli appelli disponibli.&lt;br&gt;All&#39;interno delle entità &quot;studente&quot; e &quot;segretria&quot;, questa funzione corrisponde all&#39;utilizzo&lt;br&gt;di una socket per indicare l&#39;operazione che si vuole effettuare. Sul server questa funzione&lt;br&gt;corrisponde all&#39;esecuzione della query sul database e la restituzione dei dati;&lt;/li&gt;&lt;li&gt;&lt;b&gt;prenotaEsame&lt;/b&gt;: è la funzione che permette di prenotare un esame per conto di uno studente.&lt;br&gt;L&#39;entità &quot;studente&quot; invia la richiesta alla segreteria e quest&#39;ultima la inoltra al server, quindi&lt;br&gt;l&#39;implementazione di entrambi corrisponde alla comuinicazione con una socket.&lt;br&gt;Nel server l&#39;implementazione corrisponde ad una insert nel database con la restituzione di un&lt;br&gt;valore numerico che dovrà essere inoltrato fino allo studente;&lt;/li&gt;&lt;li&gt;&lt;b&gt;getPrenotazioni&lt;/b&gt;: è la funzione che permette di ottenere gli appelli ai quali si è prenotato lo studente.&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;L&#39;entità &quot;studente&quot; invia la richiesta alla segreteria e questa la inoltra al server (socket).&lt;br&gt;Quest&#39;ultimo implementa la funzione effettuando una query al database e restituendo la tabella.&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="130" y="1465" width="690" height="260" as="geometry" />
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-1" value="Server" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fontSize=14;" vertex="1" parent="1">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-1" value="Server" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="-260" y="370" width="60" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-2" value="Segreteria" style="ellipse;rounded=0;whiteSpace=wrap;html=1;fontSize=14;perimeter=rectanglePerimeter;" vertex="1" parent="1">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-2" value="Segreteria" style="ellipse;rounded=0;whiteSpace=wrap;html=1;fontSize=14;perimeter=rectanglePerimeter;" parent="1" vertex="1">
           <mxGeometry x="-400" y="200" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-3" value="Studente" style="rounded=0;whiteSpace=wrap;html=1;fontSize=14;" vertex="1" parent="1">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-3" value="Studente" style="rounded=0;whiteSpace=wrap;html=1;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="-160" y="200" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-4" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" edge="1" parent="1" source="d-nBW25KGSs0e9RZ64rd-3" target="d-nBW25KGSs0e9RZ64rd-2">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-4" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" parent="1" source="d-nBW25KGSs0e9RZ64rd-3" target="d-nBW25KGSs0e9RZ64rd-2" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-250" y="410" as="sourcePoint" />
             <mxPoint x="-220" y="140" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-5" value="Invia matricola" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="1">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-5" value="Invia matricola" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="-260" y="160" width="70" height="55" as="geometry" />
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-6" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=-15;entryPerimeter=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" edge="1" parent="1" source="d-nBW25KGSs0e9RZ64rd-2" target="d-nBW25KGSs0e9RZ64rd-1">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-6" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=-15;entryPerimeter=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" parent="1" source="d-nBW25KGSs0e9RZ64rd-2" target="d-nBW25KGSs0e9RZ64rd-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-250" y="410" as="sourcePoint" />
             <mxPoint x="-200" y="360" as="targetPoint" />
@@ -440,7 +440,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" edge="1" parent="1" source="d-nBW25KGSs0e9RZ64rd-1" target="d-nBW25KGSs0e9RZ64rd-2">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-7" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" parent="1" source="d-nBW25KGSs0e9RZ64rd-1" target="d-nBW25KGSs0e9RZ64rd-2" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-260" y="340" as="sourcePoint" />
             <mxPoint x="-340" y="280" as="targetPoint" />
@@ -449,25 +449,25 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-8" value="Inoltra matricola al server" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="1">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-8" value="Inoltra matricola al server" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="-440" y="320" width="70" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-9" value="Invio esito auth" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-9" value="Invio esito auth" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="-340" y="320" width="50" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-10" value="Inoltra esito auth" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" vertex="1" parent="1">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-10" value="Inoltra esito auth" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="-270" y="245" width="90" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-11" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" edge="1" parent="1" source="d-nBW25KGSs0e9RZ64rd-2" target="d-nBW25KGSs0e9RZ64rd-3">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-11" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;" parent="1" source="d-nBW25KGSs0e9RZ64rd-2" target="d-nBW25KGSs0e9RZ64rd-3" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="-260" y="270" as="sourcePoint" />
             <mxPoint x="-210" y="280" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-12" value="Autenticazione Studente" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" vertex="1" parent="1">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-12" value="Autenticazione Studente" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-260" y="70" width="160" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="d-nBW25KGSs0e9RZ64rd-13" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;0. Ottenimento matricola&lt;br&gt;&lt;br&gt;SELECT * FROM &#39;studenti&#39; WHERE matricola = &amp;lt;matricola&amp;gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="d-nBW25KGSs0e9RZ64rd-13" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;0. Ottenimento matricola&lt;br&gt;&lt;br&gt;SELECT * FROM &#39;studenti&#39; WHERE matricola = &amp;lt;matricola&amp;gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1050" y="1280" width="400" height="60" as="geometry" />
         </mxCell>
       </root>

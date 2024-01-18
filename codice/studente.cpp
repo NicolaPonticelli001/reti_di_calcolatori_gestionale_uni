@@ -61,7 +61,7 @@ int main(){
         cin>>scelta;
         switch(scelta){
             case 1:{
-                Packet richiesta;
+                Packet richiesta, risposta;
                 richiesta.request=VIEW_APP;
                 richiesta.data[MATRICOLA_STUDENTE]=matricola;
                 client.clientSetup();
@@ -94,7 +94,7 @@ int main(){
                 client.Connect();
                 client.Write(&richiesta,sizeof(richiesta));
                 client.Read(&risposta,sizeof(risposta));
-                if(risposta.error.getCode==OK){
+                if(risposta.error.getCode()==OK){
                     cout<<"Prenotazione effettuata!"<<endl;
                     cout<<"Sei il numero: "<<risposta.data[GENERIC_DATA]<<endl;
                 }
@@ -105,7 +105,7 @@ int main(){
                 break;
             }
             case 3:{
-                Packet richiesta;
+                Packet richiesta, risposta;
                 richiesta.request=VIEW_APP_P;
                 richiesta.data[MATRICOLA_STUDENTE]=matricola;
                 client.clientSetup();

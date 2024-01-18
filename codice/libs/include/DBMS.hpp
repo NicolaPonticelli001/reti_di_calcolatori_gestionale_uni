@@ -11,7 +11,7 @@ private:
     sqlite3 *db;
     int error_connection_db;
 
-    void createMapResults(vector< map<string, string> > *, sqlite3_stmt*, Error* = nullptr);
+    void createMapResults(vector< map<string, string> >*, sqlite3_stmt*, Error* = nullptr);
     void executeQuery(string sql, Error *error, vector< map<string, string> >* = nullptr);
 public:
     DBMS(string db_name, Error *error = nullptr);

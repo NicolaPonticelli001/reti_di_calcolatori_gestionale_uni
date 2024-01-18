@@ -64,7 +64,7 @@ int main(){
                     client.disconnect();
                     if(risposta_prenotazione.error.getCode()==OK){
                         cout<<"Prenotazione effettuata con successo"<<endl;
-                        cout<<"Studente "<<richiesta_prentoazione[MATRICOLA_STUDENTE]<<"-#"<<richiesta_prentoazione[GENERIC_DATA];
+                        cout<<"Studente "<<richiesta_prentoazione.data[MATRICOLA_STUDENTE]<<"-#"<<richiesta_prentoazione.data[GENERIC_DATA];
                         risposta=risposta_prenotazione;
                         server.Write(&risposta,sizeof(risposta));
                     }
