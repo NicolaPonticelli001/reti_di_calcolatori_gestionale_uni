@@ -5,7 +5,7 @@
 #include <string>
 
 class ClientSocket: public SocketCommunication{
-    private:
+    public:
         std::string server_IP;
         int socket_fd;
         sockaddr_in server;
@@ -16,8 +16,8 @@ class ClientSocket: public SocketCommunication{
         int Connect();
         int Connect(int ,const struct sockaddr_in );
         void changeServerIP(std::string );
-        ssize_t Read(void *buff);
-        ssize_t Write(const void *buff);
+        ssize_t Read(void *buff,size_t n_bytes);
+        ssize_t Write(const void *buff,size_t n_bytes);
 };
 
 #endif

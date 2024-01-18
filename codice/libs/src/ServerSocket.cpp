@@ -72,10 +72,14 @@ int ServerSocket::Accept_Client(int socket_fd,struct sockaddr_in *connected_clie
     return connection_fd;
 }
 
-ssize_t ServerSocket::Read(void *buf){
-    return FullRead(this->connection_fd,buf,sizeof(buf));
+void ServerSocket::closeListening(){
+    close(this->listen_fd);
 }
 
-ssize_t ServerSocket::Write(const void *buf){
-    return FullWrite(this->connection_fd,buf,sizeof(buf));
+ssize_t ServerSocket::Read(void *buf,size_t n_bytes){
+    return FullRead(this->connection_fd,buf,n_bytes);
+}
+
+ssize_t ServerSocket::Write(const void *buf,size_t n_bytes){
+    return FullWrite(this->connection_fd,buf,n_bytes);
 }

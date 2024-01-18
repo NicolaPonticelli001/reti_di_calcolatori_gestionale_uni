@@ -4,7 +4,7 @@
 #include "SocketCommunication.hpp"
 
 class ServerSocket: public SocketCommunication{
-    private:
+    public:
         int listen_fd;
         int connection_fd;
         sockaddr_in me;
@@ -21,8 +21,9 @@ class ServerSocket: public SocketCommunication{
         int Accept_NoClient(int );
         int Accept_Client();
         int Accept_Client(int ,struct sockaddr_in *,socklen_t *);
-        ssize_t Read(void *buff);
-        ssize_t Write(const void *buff);
+        void closeListening();
+        ssize_t Read(void *buff,size_t n_bytes);
+        ssize_t Write(const void *buff,size_t n_bytes);
 };
 
 #endif
