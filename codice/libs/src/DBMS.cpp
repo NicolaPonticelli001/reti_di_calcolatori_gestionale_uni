@@ -33,7 +33,10 @@ void DBMS::executeQuery(string sql, Error *error = nullptr, vector< map<string, 
             error->setAll(GENERIC, "SQLite connect " + this->error_connection_db, "Error while connecting to database");
         }
     } else {
+        cout<<"Query: "<<sql<<endl;
         temp_error = sqlite3_prepare_v2(this->db, sql.c_str(), -1, &statement, nullptr);
+        temp_error = sqlite3_step(statement);
+        cout<<temp_error<<" - "<<sqlite3_errmsg(this->db)<<endl;
         if (temp_error != SQLITE_OK) {
             if (error != nullptr) {
                 error->setAll(SELECT_ERROR, "SQL " + temp_error, sqlite3_errmsg(this->db));

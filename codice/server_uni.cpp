@@ -125,10 +125,10 @@ void insertAppelloAction(struct Packet packet, ServerSocket server) {
 
     server.Read((void*)&appello_input, sizeof(appello_input));
 
-    sql = "INSERT INTO appelli VALUES ('"
+    sql = "INSERT INTO appelli (CodiceAppello,CodiceEsame,Data) VALUES ('"
         + to_string(appello_input.codiceAppello) + "', '"
         + to_string(appello_input.codiceEsame) + "', '"
-        + formatDate(appello_input.data) + "')";
+        + formatDate(appello_input.data) + "');";
     dbms.insert(sql, &error);
 
     packet.error = error;

@@ -40,6 +40,7 @@ int main(){
             cout<<"Errore di autenticazione"<<endl;
             cout<<"Matricola non riconosciuta"<<endl;
             cout<<"Riprova l'accesso"<<endl;
+            cout<<endl;
             tentativi++; //superati 3 tentativi di accesso, il programma termina
         }
         
@@ -61,25 +62,29 @@ int main(){
         cin>>scelta;
         switch(scelta){
             case 1:{
-                Packet richiesta, risposta;
+                Packet richiesta,risposta;
                 richiesta.request=VIEW_APP;
                 richiesta.data[MATRICOLA_STUDENTE]=matricola;
                 client.clientSetup();
+                client.Connect();
                 client.Write(&richiesta,sizeof(richiesta));
+                cout<<"Richiesta VIEW_APP inviata"<<endl;
                 client.Read(&risposta,sizeof(risposta));
+                cout<<"Risposta VIEW_APP ricevuta"<<endl;
                 client.disconnect();
                 if(risposta.error.getCode()==OK){
                     //Elaborazione appelli
-                    //int num_righe=risposta.request[RIGHE_QUERY]
-                    //AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
-                    //client.Read(appelli,sizeof(appelli)*num_righe);
+                    int num_righe=risposta.data[RIGHE_QUERY];
+                    AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
+                    client.Read(appelli,sizeof(appelli)*num_righe);
                     cout<<"Appelli disponibili:"<<endl;
-                    //printAppelli(appelli,num_righe);
-                    //delete [appelli];
+                    printAppelli(appelli,num_righe);
+                    delete[] appelli;
                 }
                 else{
                     cout<<"Errore nel caricamento degli appelli"<<endl;
                 }
+                cout<<endl;
                 break;
             }
             case 2:{
@@ -92,6 +97,7 @@ int main(){
                 richiesta.data[APPELLO]=appello;
                 client.clientSetup();
                 client.Connect();
+                cout<<"Richiesta PREN_STUD inviata"<<endl;
                 client.Write(&richiesta,sizeof(richiesta));
                 client.Read(&risposta,sizeof(risposta));
                 if(risposta.error.getCode()==OK){
@@ -105,21 +111,22 @@ int main(){
                 break;
             }
             case 3:{
-                Packet richiesta, risposta;
+                Packet richiesta,risposta;
                 richiesta.request=VIEW_APP_P;
                 richiesta.data[MATRICOLA_STUDENTE]=matricola;
                 client.clientSetup();
+                client.Connect();
                 client.Write(&richiesta,sizeof(richiesta));
                 client.Read(&risposta,sizeof(risposta));
                 client.disconnect();
                 if(risposta.error.getCode()==OK){
                     //Elaborazione appelli
-                    //int num_righe=risposta.request[RIGHE_QUERY]
-                    //AppelloPrenotato *appelli=new AppelloPrenotato[num_righe];
-                    //client.Read(appelli,sizeof(appelli)*num_righe);
+                    int num_righe=risposta.data[RIGHE_QUERY];
+                    AppelloPrenotato *appelli=new AppelloPrenotato[num_righe];
+                    client.Read(appelli,sizeof(appelli)*num_righe);
                     cout<<"Appelli disponibili:"<<endl;
-                    //printAppelli(appelli,num_righe);
-                    //delete [appelli];
+                    printAppelli(appelli,num_righe);
+                    delete[] appelli;
                 }
                 else{
                     cout<<"Errore nel caricamento degli appelli"<<endl;
@@ -135,6 +142,7 @@ int main(){
                 break;
             }
         }
+        cout<<endl;
     }while(scelta!=0);
     
     cout<<"Uscita dal programma..."<<endl;

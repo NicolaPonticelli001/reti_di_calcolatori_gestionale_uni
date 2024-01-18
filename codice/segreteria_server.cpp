@@ -26,32 +26,25 @@ int main(){
             
             switch(richiesta.request){
                 case LOGIN:{
+                    Packet richiesta_autenticazione=richiesta;
                     cout<<"Richiesta di autenticazione studente"<<endl;
                     cout<<"Autenticazione in corso..."<<endl;
-
-                    //Query al DB
-
-                    //Simulazione della query del DB
-                    int i=0;
-                    bool trovato=false;
-                    while((!trovato)&&(i<5)){
-                        if(tStudenti_prova[i]==richiesta.data[MATRICOLA_STUDENTE]){
-                            trovato=true;
-                        }
-                        i++;
-                    }
-                    if(trovato){   //Studente trovato, autenticato
+                    ClientSocket client=ClientSocket("127.0.0.1",UNI_SERVER_PORT);
+                    client.clientSetup();
+                    client.Connect();
+                    //Richiesta Query al DB
+                    client.Write(&richiesta_autenticazione,sizeof(richiesta_autenticazione));
+                    client.Read(&richiesta_autenticazione,sizeof(richiesta_autenticazione));
+                    client.disconnect();
+                    if(richiesta_autenticazione.error.getCode()==OK){
                         cout<<"Studente autenticato!"<<endl;
-                        richiesta.error.setCode(OK);
                     }
-                    else{   //Studente non trovato, non autenticato
+                    else{
                         cout<<"Errore di autenticazione, studente non autenticato!"<<endl;
-                        richiesta.error.setCode(AUTH_ERROR);
+                        richiesta_autenticazione.error.setCode(AUTH_ERROR);
                     }
-                    //Fine simulazione
-
                     //Invio esito
-                    server.Write(&richiesta,sizeof(richiesta));
+                    server.Write(&richiesta_autenticazione,sizeof(richiesta));
                     break;
                 }
                 case PREN_STUD:{
@@ -78,10 +71,11 @@ int main(){
                     client.Write(&richiesta,sizeof(richiesta)); //Inoltro della richiesta al server universitario
                     client.Read(&risposta_server,sizeof(risposta_server));  //Attesa del risultato
                     if(risposta_server.error.getCode()==OK){
-                        //int num_righe=risposta.request[RIGHE_QUERY]
-                        //AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
-                        //client.Read(appelli,sizeof(appelli)*num_righe);
-                        //server.Write(appelli,sizeof(appelli)*num_righe);
+                        int num_righe=risposta_server.data[RIGHE_QUERY];
+                        AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
+                        client.Read(appelli,sizeof(appelli)*num_righe);
+                        server.Write(appelli,sizeof(appelli)*num_righe);
+                        delete[] appelli;
                     }
                     else{
                         risposta_server.error.setCode(GENERIC);
@@ -98,11 +92,11 @@ int main(){
                     client.Write(&richiesta,sizeof(richiesta)); //Inoltro della richiesta al server universitario
                     client.Read(&risposta_server,sizeof(risposta_server));  //Attesa del risultato
                     if(risposta_server.error.getCode()==OK){
-                        //int num_righe=risposta.request[RIGHE_QUERY]
-                        //AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
-                        //client.Read(appelli,sizeof(appelli)*num_righe);
-                        //server.Write(appelli,sizeof(appelli)*num_righe);
-                        //delete [appelli]
+                        int num_righe=risposta_server.data[RIGHE_QUERY];
+                        AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
+                        client.Read(appelli,sizeof(appelli)*num_righe);
+                        server.Write(appelli,sizeof(appelli)*num_righe);
+                        delete[] appelli;
                     }
                     else{
                         risposta_server.error.setCode(GENERIC);

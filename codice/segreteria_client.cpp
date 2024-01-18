@@ -55,6 +55,7 @@ int main(){
                 cout<<"Scelta non riconosciuta"<<endl;
             }
         }
+        cout<<endl;
     }while(scelta!=0);
     cout<<"Uscita..."<<endl;
 
