@@ -92,6 +92,7 @@ void loginAction(struct Packet packet, ServerSocket server) {
     vector< map<string, string> > *table = nullptr;
 
     if (error.getCode() != OK) {
+        error.printError();
         packet.error = error;
         server.Write((void*)&packet, sizeof(packet));
         delete(table);
@@ -103,10 +104,9 @@ void loginAction(struct Packet packet, ServerSocket server) {
 
     if (error.getCode() == OK) {
         if (table->size() == 0) error.setCode(AUTH_ERROR);
-    }
+    } else error.printError();
 
     packet.error = error;
-    error.printError();
     server.Write((void*)&packet, sizeof(packet));
     delete(table);
 }
@@ -118,6 +118,7 @@ void insertAppelloAction(struct Packet packet, ServerSocket server) {
     struct Appello appello_input;
 
     if (error.getCode() != OK) {
+        error.printError();
         packet.error = error;
         server.Write((void*)&packet, sizeof(packet));
         return;
@@ -130,6 +131,7 @@ void insertAppelloAction(struct Packet packet, ServerSocket server) {
         + to_string(appello_input.codiceEsame) + "', '"
         + formatDate(appello_input.data) + "');";
     dbms.insert(sql, &error);
+    if (error.getCode() != OK) error.printError();
 
     packet.error = error;
     server.Write((void*)&packet, sizeof(packet)); 
@@ -143,6 +145,7 @@ void insertPrenotazioneAction(struct Packet packet, ServerSocket server) {
     int number = -1;
 
     if (error.getCode() != OK) {
+        error.printError();
         packet.error = error;
         server.Write((void*)&packet, sizeof(packet));
         delete(table);
@@ -160,11 +163,11 @@ void insertPrenotazioneAction(struct Packet packet, ServerSocket server) {
             + to_string(packet.data[MATRICOLA_STUDENTE]) + "', '"
             + to_string(number) + "')";
         dbms.insert(sql, &error);
-    }
+    } else error.printError();
 
     packet.error = error;
     if (number != -1) packet.data[GENERIC_DATA] = number;   // Se c'è il numero progressivo
-    server.Write((void*)&packet, sizeof(packet)); 
+    server.Write((void*)&packet, sizeof(packet));
 
     delete(table);
 }
@@ -177,6 +180,7 @@ void viewAppelli(struct Packet packet, ServerSocket server) {
     struct AppelloDisponibile *appelli;
 
     if (error.getCode() != OK) {
+        error.printError();
         packet.error = error;
         server.Write((void*)&packet, sizeof(packet));
         delete(table);
@@ -191,8 +195,6 @@ void viewAppelli(struct Packet packet, ServerSocket server) {
             WHERE prenotazioni.Studente = '" + to_string(packet.data[MATRICOLA_STUDENTE]) + "'\
             AND prenotazioni.CodiceAppello=appelli.CodiceAppello)";
     table = dbms.select(sql, &error);
-
-
 
     if (error.getCode() == OK) {
         appelli = (struct AppelloDisponibile*)malloc(sizeof(struct AppelloDisponibile) * table->size());
@@ -224,6 +226,7 @@ void viewAppelliPrenotati(struct Packet packet, ServerSocket server) {
     struct AppelloPrenotato *appelli;
 
     if (error.getCode() != OK) {
+        error.printError();
         packet.error = error;
         server.Write((void*)&packet, sizeof(packet));
         delete(table);
@@ -238,8 +241,6 @@ void viewAppelliPrenotati(struct Packet packet, ServerSocket server) {
             JOIN corsi ON corsi.CodiceCorso=esami.CodiceCorso\
         WHERE prenotazioni.Studente = '" + to_string(packet.data[MATRICOLA_STUDENTE]) + "'";
     table = dbms.select(sql, &error);
-
-
 
     if (error.getCode() == OK) {
         appelli = (struct AppelloPrenotato*)malloc(sizeof(struct AppelloPrenotato) * table->size());

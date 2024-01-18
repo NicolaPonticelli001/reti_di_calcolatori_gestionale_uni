@@ -20,11 +20,11 @@ DBMS::~DBMS() {
 
 vector< map<string, string> >* DBMS::select(string sql, Error *error) {
     vector< map<string, string> > *table_results = new vector< map<string, string> >();
-    this->executeQuery(sql, error, table_results);
+    this->executeQuery(sql, SELECT_ERROR, error, table_results);
     return table_results;
 }
 
-void DBMS::executeQuery(string sql, Error *error = nullptr, vector< map<string, string> > *table_result) {
+void DBMS::executeQuery(string sql, ErrorType error_code, Error *error = nullptr, vector< map<string, string> > *table_result) {
     sqlite3_stmt *statement;
     int temp_error;
 
@@ -33,18 +33,22 @@ void DBMS::executeQuery(string sql, Error *error = nullptr, vector< map<string, 
             error->setAll(GENERIC, "SQLite connect " + this->error_connection_db, "Error while connecting to database");
         }
     } else {
-        cout<<"Query: "<<sql<<endl;
         temp_error = sqlite3_prepare_v2(this->db, sql.c_str(), -1, &statement, nullptr);
-        temp_error = sqlite3_step(statement);
-        cout<<temp_error<<" - "<<sqlite3_errmsg(this->db)<<endl;
         if (temp_error != SQLITE_OK) {
             if (error != nullptr) {
-                error->setAll(SELECT_ERROR, "SQL " + temp_error, sqlite3_errmsg(this->db));
+                error->setAll(error_code, "SQL " + to_string(temp_error), sqlite3_errmsg(this->db));
             }
         } else {
 
             if (table_result != nullptr) {
                 this->createMapResults(table_result, statement, error);
+            } else {
+                temp_error = sqlite3_step(statement);
+                if (temp_error != SQLITE_OK && temp_error != 101) {
+                    if (error != nullptr) {
+                        error->setAll(error_code, "SQL " + to_string(temp_error), sqlite3_errmsg(this->db));
+                    }
+                }
             }
         }
     }
@@ -73,5 +77,5 @@ void DBMS::createMapResults(vector< map<string, string> > *table_results, sqlite
 }
 
 void DBMS::insert(string sql, Error *error) {
-    this->executeQuery(sql, error);
+    this->executeQuery(sql, INSERT_ERROR, error, nullptr);
 }

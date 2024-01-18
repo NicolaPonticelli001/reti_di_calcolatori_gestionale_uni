@@ -10,6 +10,8 @@ ServerSocket::ServerSocket(int portToHost) : SocketCommunication(portToHost){
 
 void ServerSocket::serverSetup(){
     listen_fd=Socket(AF_INET,SOCK_STREAM,0);
+    int flag = 1;
+    setsockopt(this->listen_fd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
     me.sin_family=AF_INET;
     me.sin_addr.s_addr=htonl(INADDR_ANY);
     me.sin_port=htons(this->port);

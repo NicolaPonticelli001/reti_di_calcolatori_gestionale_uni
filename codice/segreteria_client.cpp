@@ -33,6 +33,7 @@ int main(){
             cin>>ora;
             data+=" "+ora;
             strcpy(appello.data,data.c_str());
+            appello.data[16] = '\0';
 
             richiesta.request=INS_APPELLO;
 

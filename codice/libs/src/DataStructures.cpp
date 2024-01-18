@@ -47,7 +47,10 @@ string Error::getDescription() {
 }
 
 void Error::printError() {
-    cout << "ERRORE" << endl;
-    cout << "Codice: " << this->code << endl;
-    if (this->code != OK) cout << this->title << ": " << this->description << endl;
+    string title_str = this->title, description_str = this->description;
+
+    cout << endl << "Errore codice " << this->code << endl;
+    if (!title_str.empty()) cout << "Titolo: " << title_str << endl;
+    if (!description_str.empty()) cout << "Descrizione: " << description_str << endl;
+    cout << endl;
 }

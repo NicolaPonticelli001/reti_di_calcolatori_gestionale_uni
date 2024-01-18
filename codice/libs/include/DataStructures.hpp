@@ -65,7 +65,7 @@ struct Packet{
 struct Appello{                 //struct di input
     int codiceAppello;
     int codiceEsame;
-    char data[16];
+    char data[17];
 };
 
 struct AppelloPrenotato{        //struct di output
