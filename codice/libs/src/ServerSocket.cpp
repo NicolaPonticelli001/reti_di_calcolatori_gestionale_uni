@@ -76,6 +76,10 @@ void ServerSocket::closeListening(){
     close(this->listen_fd);
 }
 
+void ServerSocket::closeServer(){
+    close(this->listen_fd);
+}
+
 ssize_t ServerSocket::Read(void *buf,size_t n_bytes){
     return FullRead(this->connection_fd,buf,n_bytes);
 }

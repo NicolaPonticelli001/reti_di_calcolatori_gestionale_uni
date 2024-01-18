@@ -22,6 +22,7 @@ class ServerSocket: public SocketCommunication{
         int Accept_Client();
         int Accept_Client(int ,struct sockaddr_in *,socklen_t *);
         void closeListening();
+        void closeServer();
         ssize_t Read(void *buff,size_t n_bytes);
         ssize_t Write(const void *buff,size_t n_bytes);
 };

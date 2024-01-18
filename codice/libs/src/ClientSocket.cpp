@@ -48,6 +48,10 @@ void ClientSocket::changeServerIP(string newIP){
     cout<<"IP aggiornato con successo"<<endl;
 }
 
+void ClientSocket::disconnect(){
+    close(this->socket_fd);
+}
+
 ssize_t ClientSocket::Read(void *buf,size_t n_bytes){
     return FullRead(this->socket_fd,buf,n_bytes);
 }

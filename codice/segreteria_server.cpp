@@ -55,15 +55,60 @@ int main(){
                     break;
                 }
                 case PREN_STUD:{
+                    ClientSocket client=ClientSocket("127.0.0.1",UNI_SERVER_PORT);
+                    client.clientSetup();
+                    Packet richiesta_prentoazione=richiesta,risposta_prenotazione,risposta;
+                    client.Connect();
+                    client.Write(&richiesta_prentoazione,sizeof(richiesta_prentoazione));
+                    client.Read(&risposta_prenotazione,sizeof(richiesta_prentoazione));
+                    client.disconnect();
+                    if(risposta_prenotazione.error.getCode()==OK){
+                        cout<<"Prenotazione effettuata con successo"<<endl;
+                        cout<<"Studente "<<richiesta_prentoazione[MATRICOLA_STUDENTE]<<"-#"<<richiesta_prentoazione[GENERIC_DATA];
+                        risposta=risposta_prenotazione;
+                        server.Write(&risposta,sizeof(risposta));
+                    }
                     break;
-                    
                 }
                 case VIEW_APP:{
-
+                    Packet risposta_server;
+                    ClientSocket client=ClientSocket("127.0.0.1",UNI_SERVER_PORT);
+                    client.clientSetup();
+                    client.Connect();
+                    client.Write(&richiesta,sizeof(richiesta)); //Inoltro della richiesta al server universitario
+                    client.Read(&risposta_server,sizeof(risposta_server));  //Attesa del risultato
+                    if(risposta_server.error.getCode()==OK){
+                        //int num_righe=risposta.request[RIGHE_QUERY]
+                        //AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
+                        //client.Read(appelli,sizeof(appelli)*num_righe);
+                        //server.Write(appelli,sizeof(appelli)*num_righe);
+                    }
+                    else{
+                        risposta_server.error.setCode(GENERIC);
+                        server.Write(&risposta_server,sizeof(risposta_server));
+                    }
+                    client.disconnect();
                     break;
                 }
                 case VIEW_APP_P:{
-
+                    Packet risposta_server;
+                    ClientSocket client=ClientSocket("127.0.0.1",UNI_SERVER_PORT);
+                    client.clientSetup();
+                    client.Connect();
+                    client.Write(&richiesta,sizeof(richiesta)); //Inoltro della richiesta al server universitario
+                    client.Read(&risposta_server,sizeof(risposta_server));  //Attesa del risultato
+                    if(risposta_server.error.getCode()==OK){
+                        //int num_righe=risposta.request[RIGHE_QUERY]
+                        //AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
+                        //client.Read(appelli,sizeof(appelli)*num_righe);
+                        //server.Write(appelli,sizeof(appelli)*num_righe);
+                        //delete [appelli]
+                    }
+                    else{
+                        risposta_server.error.setCode(GENERIC);
+                        server.Write(&risposta_server,sizeof(risposta_server));
+                    }
+                    client.disconnect();
                     break;
                 }
                 default:{
@@ -71,7 +116,7 @@ int main(){
                     break;
                 }
             }
-            
+            server.closeServer();
             exit(0);
         }
     }
