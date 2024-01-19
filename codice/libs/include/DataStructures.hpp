@@ -40,16 +40,16 @@ class Error {
 
     public:
         Error();
-        Error(ErrorType);
-        Error(ErrorType, string, string);
+        Error(ErrorType error_code);
+        Error(ErrorType error_code, string title, string description);
         ~Error();
 
-        void setAll(ErrorType, string, string);
-        void setCode(ErrorType);
+        void setAll(ErrorType error_code, string title, string description);
+        void setCode(ErrorType error_code);
         ErrorType getCode();
-        void setTitle(string);
+        void setTitle(string title);
         string getTitle();
-        void setDescription(string);
+        void setDescription(string description);
         string getDescription();
         void printError();
 };
