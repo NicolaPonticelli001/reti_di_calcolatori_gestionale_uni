@@ -3,7 +3,11 @@
 
 #include "SocketCommunication.hpp"
 
-class ServerSocket: public SocketCommunication{
+//Classe per gestire il lato server della comunicazione:
+//  -impostazione dei dati per l'ascolto
+//  -messa in ascolto delle richeiste
+//  -trasferimento dati attraverso le socket
+class ServerSocket: protected SocketCommunication{
     private:
         int listen_fd;
         int connection_fd;

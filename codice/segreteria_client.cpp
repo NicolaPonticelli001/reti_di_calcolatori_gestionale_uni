@@ -6,9 +6,6 @@
 using namespace std;
 
 int main(){
-    string IP="127.0.0.1";
-    ClientSocket client=ClientSocket(IP,SEGRETERIA_SERVER_PORT);
-
     cout<<"Benvenuto nel gestionale dell'universita'"<<endl;
     int scelta;
     do{
@@ -16,18 +13,19 @@ int main(){
         cout<<"1)Aggiungi un nuovo appello"<<endl;
         cout<<"0)Esci"<<endl;
         cin>>scelta;
+        cout<<endl;
         if(scelta==1){
             struct Packet richiesta,risposta;
             struct Appello appello;
             string IP="127.0.0.1",data,ora;
-            ClientSocket client=ClientSocket(IP,UNI_SERVER_PORT);
-            client.clientSetup();
+            ClientSocket client=ClientSocket(IP,UNI_SERVER_PORT);   //Creazione dell'oggetto client per la comunicazione
+            client.clientSetup();   //Inizializzazione dati per la comunicazione
             
             cout<<"Inserisci il codice dell'appello: ";
             cin>>appello.codiceAppello;
             cout<<"Inserisci il codice dell'esame: ";
             cin>>appello.codiceEsame;
-            cout<<"Inserisci la data formato 'GG-MM-AAAA':";
+            cout<<"Inserisci la data formato 'GG-MM-AAAA': ";
             cin>>data;
             cout<<"Inserisci l'ora in formato 'hh:mm': ";
             cin>>ora;
@@ -35,14 +33,14 @@ int main(){
             strcpy(appello.data,data.c_str());
             appello.data[16] = '\0';
 
-            richiesta.request=INS_APPELLO;
+            richiesta.request=INS_APPELLO;  //Scelta dell'operazione da fare
 
-            client.Connect();
+            client.Connect();   //Connessione al server
 
             client.Write(&richiesta,sizeof(richiesta)); //Invio richiesta al server
             client.Write(&appello,sizeof(appello)); //Invio dati appello da inserire
 
-            client.Read(&risposta,sizeof(risposta)); //Attesa della risposta
+            client.Read(&risposta,sizeof(risposta)); //Attesa e ricezione della risposta
 
             if(risposta.error.getCode()==OK){
                 cout<<"Appello inserito con successo"<<endl;
@@ -53,7 +51,7 @@ int main(){
         }
         else{
             if(scelta!=0){
-                cout<<"Scelta non riconosciuta"<<endl;
+                cout<<"Scelta non riconosciuta, riprova"<<endl;
             }
         }
         cout<<endl;

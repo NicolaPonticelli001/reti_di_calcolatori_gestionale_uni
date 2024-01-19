@@ -2,10 +2,12 @@
 #include <iostream>
 using namespace std;
 
+//Costruttore, imposta la porta su cui avviene la comunicazione tra le socket
 SocketCommunication::SocketCommunication(int porta){
     this->port=porta;
 }
 
+//Metodo che wrappa la system call socket()
 int SocketCommunication::Socket(int family, int type, int protocol){
     int fd;
     if((fd=socket(family,type,protocol))<0){
@@ -15,6 +17,7 @@ int SocketCommunication::Socket(int family, int type, int protocol){
     return fd;
 }
 
+//Metodi che wrappano le system calls read() e write() permettendo la lettura di tutto il buffer
 ssize_t SocketCommunication::FullRead(int fd, void *buf, size_t count){
     size_t nleft; 
     ssize_t nread; 

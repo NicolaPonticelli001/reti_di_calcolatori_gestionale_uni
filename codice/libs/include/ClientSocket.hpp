@@ -4,7 +4,11 @@
 #include "SocketCommunication.hpp"
 #include <string>
 
-class ClientSocket: public SocketCommunication{
+//Classe per gestire il lato client della comunicazione:
+//  -impostazione dei dati per la connessione
+//  -richiesta di connessione al server
+//  -trasferimento dati attraverso la socket
+class ClientSocket: protected SocketCommunication{
     private:
         std::string server_IP;
         int socket_fd;

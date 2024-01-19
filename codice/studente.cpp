@@ -19,9 +19,9 @@ int main(){
     cout<<"Effettua l'accesso con la tua matricola"<<endl;
     do{
         cin>>matricola;
+        cout<<endl;
 
         struct Packet pacchetto;
-        //pacchetto.request=LOGIN;
         pacchetto.data[MATRICOLA_STUDENTE]=matricola;
         
         client.clientSetup();
@@ -30,18 +30,17 @@ int main(){
 
         client.Write((const void*)&pacchetto,sizeof(pacchetto));   //Invio richiesta al server
 
-        client.Read((void *)&pacchetto,sizeof(pacchetto));    //Attesa
+        client.Read((void *)&pacchetto,sizeof(pacchetto));    //Attesa e ricezione
 
         client.disconnect();
 
         if(pacchetto.error.getCode()==OK)
             authenticated=true;
         else{
+            tentativi++; //superati 3 tentativi di accesso, il programma termina
             cout<<"Errore di autenticazione"<<endl;
             cout<<"Matricola non riconosciuta"<<endl;
             cout<<"Riprova l'accesso"<<endl;
-            cout<<endl;
-            tentativi++; //superati 3 tentativi di accesso, il programma termina
         }
         
     }while((tentativi<3)&&(!authenticated));
@@ -74,7 +73,6 @@ int main(){
                 if(risposta.error.getCode()==OK){
                     //Elaborazione appelli
                     int num_righe=risposta.data[RIGHE_QUERY];
-                    cout << "Righe: " << num_righe << endl;
                     AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
                     client.Read(appelli,sizeof(AppelloDisponibile)*num_righe);
                     cout<<"Appelli disponibili:"<<endl;
@@ -107,7 +105,6 @@ int main(){
                 else{
                     cout<<"Errore di prenotazione"<<endl;
                 }
-                client.disconnect();
                 break;
             }
             case 3:{
@@ -154,21 +151,21 @@ int main(){
 
 void printAppelli(AppelloDisponibile *appelli,int num_righe){
     for(int i=0;i<num_righe;i++){
-        cout<<"Appello:\t"<<appelli[i].codiceAppello<<endl;
-        cout<<"Nome appello:\t"<<appelli[i].nome<<endl;
-        cout<<"Data appello:\t"<<appelli[i].data<<endl;
+        cout<<"Appello: "<<appelli[i].codiceAppello<<endl;
+        cout<<"Nome appello: "<<appelli[i].nome<<endl;
+        cout<<"Data appello: "<<appelli[i].data<<endl;
     }
 }
 
 void printAppelli(AppelloPrenotato *appelli,int num_righe){
     for(int i=0;i<num_righe;i++){
-        cout<<"Appello:\t"<<appelli[i].codice<<endl;
-        cout<<"Data:\t"<<appelli[i].data<<endl;
-        cout<<"Nome:\t"<<appelli[i].nome<<endl;
-        cout<<"Tipo:\t"<<appelli[i].tipo<<endl;
-        cout<<"Modalita'\t"<<appelli[i].modalita<<endl;
-        cout<<"Descrizione\t"<<appelli[i].descrizione<<endl;
-        cout<<"#Prenotazione"<<appelli[i].numeroPrenotazione<<endl;
-        cout<<endl<<endl;
+        cout<<"Appello: "<<appelli[i].codice<<endl;
+        cout<<"Data: "<<appelli[i].data<<endl;
+        cout<<"Nome: "<<appelli[i].nome<<endl;
+        cout<<"Tipo: "<<appelli[i].tipo<<endl;
+        cout<<"Modalita': "<<appelli[i].modalita<<endl;
+        cout<<"Descrizione: "<<appelli[i].descrizione<<endl;
+        cout<<"#Prenotazione: "<<appelli[i].numeroPrenotazione<<endl;
+        cout<<endl;
     }
 }

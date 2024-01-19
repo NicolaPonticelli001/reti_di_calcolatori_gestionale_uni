@@ -1,10 +1,6 @@
 #ifndef SOCKETCOMMUNICATION_HPP
 #define SOCKETCOMMUNICATION_HPP
 
-//Macro per indicare le porte di hosting e di connessione
-#define UNI_SERVER_PORT 10000
-#define SEGRETERIA_SERVER_PORT 20000
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -14,6 +10,14 @@
 #include <sys/types.h>
 #include <errno.h>
 
+//Macro per indicare le porte di hosting e di connessione
+#define UNI_SERVER_PORT 10000
+#define SEGRETERIA_SERVER_PORT 20000
+
+//Macro per la lunghezza massima della coda dei client in attesa
+#define QUEUE_LENGTH 1024
+
+//Classe per gestire l'effettivo trasferimento dei dati sulla socket
 class SocketCommunication{
     protected:
         int port;

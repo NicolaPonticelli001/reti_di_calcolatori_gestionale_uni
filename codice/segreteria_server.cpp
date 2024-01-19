@@ -18,8 +18,7 @@ int main(){
 
         pid=fork();
         if(pid==0){
-            //Chiudi fd di ascolto
-            server.closeListening();
+            server.closeListening();    //Chiusura fd di ascolto
             
             struct Packet richiesta;
             server.Read((void *)&richiesta,sizeof(richiesta));
@@ -57,14 +56,14 @@ int main(){
                     client.disconnect();
                     if(risposta_prenotazione.error.getCode()==OK){
                         cout<<"Prenotazione effettuata con successo"<<endl;
-                        cout<<"Studente "<<richiesta_prentoazione.data[MATRICOLA_STUDENTE]<<"-#"<<risposta_prenotazione.data[GENERIC_DATA];
+                        cout<<"Studente "<<richiesta_prentoazione.data[MATRICOLA_STUDENTE]<<"-#"<<risposta_prenotazione.data[GENERIC_DATA]<<endl;
                         risposta=risposta_prenotazione;
                         server.Write(&risposta,sizeof(risposta));
                     }
                     break;
                 }
                 case VIEW_APP:{
-                    cout << "Dentro VIEW_APP. Matricola: " << richiesta.data[MATRICOLA_STUDENTE] << endl;
+                    cout<<"Richiesta visione appelli disponibili, studente: " << richiesta.data[MATRICOLA_STUDENTE]<<endl;
                     Packet risposta_server;
                     ClientSocket client=ClientSocket("127.0.0.1",UNI_SERVER_PORT);
                     client.clientSetup();
@@ -72,11 +71,13 @@ int main(){
                     client.Write(&richiesta,sizeof(richiesta)); //Inoltro della richiesta al server universitario
                     client.Read(&risposta_server,sizeof(risposta_server));  //Attesa del risultato
                     if(risposta_server.error.getCode()==OK){
+                        //Gestione appelli
                         int num_righe=risposta_server.data[RIGHE_QUERY];
+                        cout<<"Numero appelli trovati per lo studente "<<risposta_server.data[MATRICOLA_STUDENTE]<<": "<<risposta_server.data[RIGHE_QUERY]<<endl;
                         AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
-                        server.Write(&risposta_server, sizeof(risposta_server));
-                        client.Read(appelli,sizeof(AppelloDisponibile)*num_righe);
-                        server.Write(appelli,sizeof(AppelloDisponibile)*num_righe);
+                        server.Write(&risposta_server, sizeof(risposta_server));    //Invio allo studente il numero di appelli trovati
+                        client.Read(appelli,sizeof(AppelloDisponibile)*num_righe);  //Ottenimento risultato della query dal server universitario
+                        server.Write(appelli,sizeof(AppelloDisponibile)*num_righe); //Invio risultato della query allo studente
                         delete[] appelli;
                     }
                     else{
@@ -95,6 +96,7 @@ int main(){
                     client.Read(&risposta_server,sizeof(risposta_server));  //Attesa del risultato
                     if(risposta_server.error.getCode()==OK){
                         int num_righe=risposta_server.data[RIGHE_QUERY];
+                        cout<<"Numero appelli trovati per lo studente "<<risposta_server.data[MATRICOLA_STUDENTE]<<": "<<risposta_server.data[RIGHE_QUERY]<<endl;
                         AppelloPrenotato *appelli=new AppelloPrenotato[num_righe];
                         server.Write(&risposta_server, sizeof(risposta_server));
                         client.Read(appelli,sizeof(AppelloPrenotato)*num_righe);
@@ -109,11 +111,11 @@ int main(){
                     break;
                 }
                 default:{
-
                     break;
                 }
             }
             server.closeServer();
+            cout<<endl;
             exit(0);
         }
     }
