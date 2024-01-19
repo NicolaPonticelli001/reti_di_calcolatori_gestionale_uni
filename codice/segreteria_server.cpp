@@ -77,6 +77,13 @@ int main(){
                         AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
                         server.Write(&risposta_server, sizeof(risposta_server));    //Invio allo studente il numero di appelli trovati
                         client.Read(appelli,sizeof(AppelloDisponibile)*num_righe);  //Ottenimento risultato della query dal server universitario
+                        cout<<"...-...-...-...-...-...-...-...-..."<<endl;
+                        for(int i=0;i<num_righe;i++){
+                            cout<<"Appello: "<<appelli[i].codiceAppello<<endl;
+                            cout<<"Nome appello: "<<appelli[i].nome<<endl;
+                            cout<<"Data appello: "<<appelli[i].data<<endl;
+                            cout<<"...-...-...-...-...-...-...-...-..."<<endl;
+                        }
                         server.Write(appelli,sizeof(AppelloDisponibile)*num_righe); //Invio risultato della query allo studente
                         delete[] appelli;
                     }
