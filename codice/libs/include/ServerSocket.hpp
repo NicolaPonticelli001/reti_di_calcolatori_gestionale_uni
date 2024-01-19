@@ -4,7 +4,7 @@
 #include "SocketCommunication.hpp"
 
 class ServerSocket: public SocketCommunication{
-    public:
+    private:
         int listen_fd;
         int connection_fd;
         sockaddr_in me;
@@ -12,15 +12,15 @@ class ServerSocket: public SocketCommunication{
         socklen_t client_length;
 
     
-        int Bind(int , const struct sockaddr_in );
-        int Listen(int , int );
+        int Bind(int socket_fd,const struct sockaddr_in server_address);
+        int Listen(int socket_fd, int queueLength);
     public:
-        ServerSocket(int );
+        ServerSocket(int portToHost);
         void serverSetup();
         int Accept_NoClient();
-        int Accept_NoClient(int );
+        int Accept_NoClient(int socket_fd);
         int Accept_Client();
-        int Accept_Client(int ,struct sockaddr_in *,socklen_t *);
+        int Accept_Client(int socket_fd,struct sockaddr_in *connected_client,socklen_t *client_lenght);
         void closeListening();
         void closeServer();
         ssize_t Read(void *buff,size_t n_bytes);

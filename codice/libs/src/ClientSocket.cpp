@@ -10,9 +10,9 @@ ClientSocket::ClientSocket(string IP,int portToConnect) : SocketCommunication(po
 
 void ClientSocket::clientSetup(){
     this->socket_fd=this->Socket(AF_INET,SOCK_STREAM,0);
-    this->server.sin_family=AF_INET;
-    this->server.sin_port=htons(this->port);
-    if (inet_pton(AF_INET, this->server_IP.c_str(), &this->server.sin_addr) < 0) {
+    this->serverToConnect.sin_family=AF_INET;
+    this->serverToConnect.sin_port=htons(this->port);
+    if (inet_pton(AF_INET, this->server_IP.c_str(), &this->serverToConnect.sin_addr) < 0) {
         fprintf(stderr,"inet_pton error for %s\n", this->server_IP.c_str());
         exit (1);
     }
@@ -21,7 +21,7 @@ void ClientSocket::clientSetup(){
 
 int ClientSocket::Connect(){
     cout<<"Avvio tentativo di connessione"<<endl;
-    if (connect(this->socket_fd, (struct sockaddr *) &this->server, sizeof(server)) < 0) {
+    if (connect(this->socket_fd, (struct sockaddr *) &this->serverToConnect, sizeof(serverToConnect)) < 0) {
         fprintf(stderr,"connect error\n");
         exit(1);
     }
@@ -29,9 +29,9 @@ int ClientSocket::Connect(){
     return 0;
 }
 
-int ClientSocket::Connect(int socket_fd,const struct sockaddr_in server_address){
+int ClientSocket::Connect(int socket_fd,const struct sockaddr_in server){
     cout<<"Avvio tentativo di connessione"<<endl;
-    if (connect(socket_fd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0) {
+    if (connect(socket_fd, (struct sockaddr *) &server, sizeof(server)) < 0) {
         fprintf(stderr,"connect error\n");
         exit(1);
     }
@@ -41,7 +41,7 @@ int ClientSocket::Connect(int socket_fd,const struct sockaddr_in server_address)
 
 void ClientSocket::changeServerIP(string newIP){
     this->server_IP=newIP;
-    if (inet_pton(AF_INET, this->server_IP.c_str(), &this->server.sin_addr) < 0) {
+    if (inet_pton(AF_INET, this->server_IP.c_str(), &this->serverToConnect.sin_addr) < 0) {
         fprintf(stderr,"inet_pton error for %s\n", this->server_IP.c_str());
         exit (1);
     }

@@ -29,8 +29,8 @@ int ServerSocket::Bind(int socket_fd, const struct sockaddr_in server_address){
     return 0;
 }
 
-int ServerSocket::Listen(int socket_fd, int lunghezza_coda){
-    if ( listen(socket_fd, lunghezza_coda) < 0 ) {
+int ServerSocket::Listen(int socket_fd, int queueLength){
+    if ( listen(socket_fd, queueLength) < 0 ) {
         perror("listen");
         exit(1);
     }
@@ -57,12 +57,11 @@ int ServerSocket::Accept_NoClient(int socket_fd){
 
 int ServerSocket::Accept_Client(){
     this->client_length=sizeof(this->client);
-    int connection_fd;
-    if ( ( connection_fd = accept(this->listen_fd, (struct sockaddr *) &this->client, &this->client_length) ) < 0 ) {
+    if ( ( this->connection_fd = accept(this->listen_fd, (struct sockaddr *) &this->client, &this->client_length) ) < 0 ) {
         perror("accept");
         exit(1);
     }
-    return connection_fd;
+    return this->connection_fd;
 }
 
 int ServerSocket::Accept_Client(int socket_fd,struct sockaddr_in *connected_client,socklen_t *client_lenght){
