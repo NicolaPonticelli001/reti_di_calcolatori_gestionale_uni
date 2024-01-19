@@ -1,2 +1,6 @@
 **/.*
+segreteria_client
+segreteria_server
+studente
+server_uni
 !.gitignore
