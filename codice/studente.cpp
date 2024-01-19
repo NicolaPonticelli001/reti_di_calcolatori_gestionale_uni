@@ -154,6 +154,7 @@ void printAppelli(AppelloDisponibile *appelli,int num_righe){
         cout<<"Appello: "<<appelli[i].codiceAppello<<endl;
         cout<<"Nome appello: "<<appelli[i].nome<<endl;
         cout<<"Data appello: "<<appelli[i].data<<endl;
+        cout<<endl;
     }
 }
 

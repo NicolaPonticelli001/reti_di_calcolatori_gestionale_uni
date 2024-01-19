@@ -260,12 +260,12 @@ void viewAppelli(struct Packet packet, ServerSocket server) {
         for (unsigned int i = 0; i < table->size(); i++) {
             map<string, string> row = table->at(i);
             appelli[i].codiceAppello = stoi(row.at("Codice"));
-            strcpy(appelli[i].data, formatDate(row.at("Data")).c_str());
             strcpy(appelli[i].nome, row.at("Nome").c_str());
+            strcpy(appelli[i].data, formatDate(row.at("Data")).c_str());
 
-            for (map<string, string>::iterator j = row.begin(); j != row.end(); j++) {
-                cout << j->first << ": " << j->second << endl;
-            }
+            cout << "Codice appello: " << appelli[i].codiceAppello << endl;
+            cout << "Nome: " << appelli[i].nome << endl;
+            cout << "Data: " << appelli[i].data << endl;
             cout << "----- ----- ----- -----" << endl;
         }
 
@@ -305,7 +305,7 @@ void viewAppelliPrenotati(struct Packet packet, ServerSocket server) {
     }
 
     /* Ottenimento degli appelli ai quali lo studente è prenotato */
-    sql = "SELECT prenotazioni.CodiceAppello AS Codice,appelli.Data,corsi.Nome,esami.Tipo,esami.Modalita,esami.Descrizione, Prenotazioni.NumeroProgressivo AS #Prenotazione\
+    sql = "SELECT prenotazioni.CodiceAppello AS Codice,appelli.Data,corsi.Nome,esami.Tipo,esami.Modalita,esami.Descrizione, Prenotazioni.NumeroProgressivo AS NPrenotazione\
         FROM prenotazioni\
             JOIN studenti ON prenotazioni.Studente=studenti.Matricola\
             JOIN appelli ON prenotazioni.CodiceAppello=appelli.CodiceAppello\
@@ -328,11 +328,15 @@ void viewAppelliPrenotati(struct Packet packet, ServerSocket server) {
             strcpy(appelli[i].tipo, row.at("Tipo").c_str());
             strcpy(appelli[i].modalita, row.at("Modalita").c_str());
             strcpy(appelli[i].descrizione, row.at("Descrizione").c_str());
-            appelli[i].numeroPrenotazione = stoi(row.at("NumeroPrenotazione"));
+            appelli[i].numeroPrenotazione = stoi(row.at("NPrenotazione"));
 
-            for (map<string, string>::iterator j = row.begin(); j != row.end(); j++) {
-                cout << j->first << ": " << j->second << endl;
-            }
+            cout << "Codice: " << appelli[i].codice << endl;
+            cout << "Data: " << appelli[i].data << endl;
+            cout << "Nome: " << appelli[i].nome << endl;
+            cout << "Tipo: " << appelli[i].tipo << endl;
+            cout << "Modalita: " << appelli[i].modalita << endl;
+            cout << "Descrizione: " << appelli[i].descrizione << endl;
+            cout << "Prenotazione: " << appelli[i].numeroPrenotazione << endl;
             cout << "----- ----- ----- -----" << endl;
         }
 

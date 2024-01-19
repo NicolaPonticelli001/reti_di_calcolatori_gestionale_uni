@@ -68,18 +68,18 @@ struct Appello{                 //struct di input
 
 struct AppelloPrenotato{        //struct di output
     int codice;
-    char data[16];
-    char nome[50];
-    char tipo[5];
-    char modalita[7];
-    char descrizione[500];
+    char data[17];
+    char nome[51];
+    char tipo[6];
+    char modalita[8];
+    char descrizione[501];
     short int numeroPrenotazione;
 };
 
 struct AppelloDisponibile{      //struct di output
     int codiceAppello;
-    char data[16];
-    char nome[50];
+    char data[17];
+    char nome[51];
 };
 
 #endif
