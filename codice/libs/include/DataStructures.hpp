@@ -24,12 +24,10 @@ enum RequestType{
 //Enumerazione per identificare il tipo di errore
 enum ErrorType {
     OK,             //0
-    NOT_REC,        //1
-    NOT_TRANSFER,   //2
-    INSERT_ERROR,   //3
-    SELECT_ERROR,   //4
-    AUTH_ERROR,     //5
-    GENERIC         //6
+    INSERT_ERROR,   //1
+    SELECT_ERROR,   //2
+    AUTH_ERROR,     //3
+    GENERIC         //4
 };
 
 //Classe che rappresenta l'errore che si è verificato dopo una richiesta
