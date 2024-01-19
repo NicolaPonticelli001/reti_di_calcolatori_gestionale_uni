@@ -152,7 +152,7 @@ void insertPrenotazioneAction(struct Packet packet, ServerSocket server) {
         return;
     }
 
-    sql = "SELECT MAX(NumeroProgressivo) AS MaxNumero FROM prenotazioni WHERE CodiceAppello = '" + to_string(packet.data[APPELLO]) + "'";
+    sql = "SELECT count(*) AS MaxNumero FROM prenotazioni WHERE CodiceAppello = '" + to_string(packet.data[APPELLO]) + "'";
     table = dbms.select(sql, &error);
 
     if (error.getCode() == OK) {
@@ -207,7 +207,7 @@ void viewAppelli(struct Packet packet, ServerSocket server) {
         packet.error = error;
         packet.data[RIGHE_QUERY] = table->size();
         server.Write((void*)&packet, sizeof(packet));
-        server.Write((void*)&appelli, sizeof(struct AppelloDisponibile) * table->size());
+        server.Write((void*)appelli, sizeof(struct AppelloDisponibile) * table->size());
     } else {
         packet.error = error;
         error.printError();
@@ -257,7 +257,7 @@ void viewAppelliPrenotati(struct Packet packet, ServerSocket server) {
         packet.error = error;
         packet.data[RIGHE_QUERY] = table->size();
         server.Write((void*)&packet, sizeof(packet));
-        server.Write((void*)&appelli, sizeof(struct AppelloPrenotato) * table->size());
+        server.Write((void*)appelli, sizeof(struct AppelloPrenotato) * table->size());
     } else {
         packet.error = error;
         error.printError();

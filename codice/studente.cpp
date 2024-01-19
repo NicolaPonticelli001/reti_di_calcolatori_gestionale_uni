@@ -71,12 +71,12 @@ int main(){
                 cout<<"Richiesta VIEW_APP inviata"<<endl;
                 client.Read(&risposta,sizeof(risposta));
                 cout<<"Risposta VIEW_APP ricevuta"<<endl;
-                client.disconnect();
                 if(risposta.error.getCode()==OK){
                     //Elaborazione appelli
                     int num_righe=risposta.data[RIGHE_QUERY];
+                    cout << "Righe: " << num_righe << endl;
                     AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
-                    client.Read(appelli,sizeof(appelli)*num_righe);
+                    client.Read(appelli,sizeof(AppelloDisponibile)*num_righe);
                     cout<<"Appelli disponibili:"<<endl;
                     printAppelli(appelli,num_righe);
                     delete[] appelli;
@@ -118,12 +118,12 @@ int main(){
                 client.Connect();
                 client.Write(&richiesta,sizeof(richiesta));
                 client.Read(&risposta,sizeof(risposta));
-                client.disconnect();
                 if(risposta.error.getCode()==OK){
                     //Elaborazione appelli
                     int num_righe=risposta.data[RIGHE_QUERY];
+                    cout << "Righe: " << num_righe << endl;
                     AppelloPrenotato *appelli=new AppelloPrenotato[num_righe];
-                    client.Read(appelli,sizeof(appelli)*num_righe);
+                    client.Read(appelli,sizeof(AppelloPrenotato)*num_righe);
                     cout<<"Appelli disponibili:"<<endl;
                     printAppelli(appelli,num_righe);
                     delete[] appelli;
@@ -131,6 +131,7 @@ int main(){
                 else{
                     cout<<"Errore nel caricamento degli appelli"<<endl;
                 }
+                cout<<endl;
                 break;
             }
             case 0:{
@@ -142,6 +143,7 @@ int main(){
                 break;
             }
         }
+        client.disconnect();
         cout<<endl;
     }while(scelta!=0);
     
@@ -167,6 +169,6 @@ void printAppelli(AppelloPrenotato *appelli,int num_righe){
         cout<<"Modalita'\t"<<appelli[i].modalita<<endl;
         cout<<"Descrizione\t"<<appelli[i].descrizione<<endl;
         cout<<"#Prenotazione"<<appelli[i].numeroPrenotazione<<endl;
-        cout<<endl;
+        cout<<endl<<endl;
     }
 }

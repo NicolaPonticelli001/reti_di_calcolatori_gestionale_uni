@@ -57,13 +57,14 @@ int main(){
                     client.disconnect();
                     if(risposta_prenotazione.error.getCode()==OK){
                         cout<<"Prenotazione effettuata con successo"<<endl;
-                        cout<<"Studente "<<richiesta_prentoazione.data[MATRICOLA_STUDENTE]<<"-#"<<richiesta_prentoazione.data[GENERIC_DATA];
+                        cout<<"Studente "<<richiesta_prentoazione.data[MATRICOLA_STUDENTE]<<"-#"<<risposta_prenotazione.data[GENERIC_DATA];
                         risposta=risposta_prenotazione;
                         server.Write(&risposta,sizeof(risposta));
                     }
                     break;
                 }
                 case VIEW_APP:{
+                    cout << "Dentro VIEW_APP. Matricola: " << richiesta.data[MATRICOLA_STUDENTE] << endl;
                     Packet risposta_server;
                     ClientSocket client=ClientSocket("127.0.0.1",UNI_SERVER_PORT);
                     client.clientSetup();
@@ -73,8 +74,9 @@ int main(){
                     if(risposta_server.error.getCode()==OK){
                         int num_righe=risposta_server.data[RIGHE_QUERY];
                         AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
-                        client.Read(appelli,sizeof(appelli)*num_righe);
-                        server.Write(appelli,sizeof(appelli)*num_righe);
+                        server.Write(&risposta_server, sizeof(risposta_server));
+                        client.Read(appelli,sizeof(AppelloDisponibile)*num_righe);
+                        server.Write(appelli,sizeof(AppelloDisponibile)*num_righe);
                         delete[] appelli;
                     }
                     else{
@@ -93,9 +95,10 @@ int main(){
                     client.Read(&risposta_server,sizeof(risposta_server));  //Attesa del risultato
                     if(risposta_server.error.getCode()==OK){
                         int num_righe=risposta_server.data[RIGHE_QUERY];
-                        AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
-                        client.Read(appelli,sizeof(appelli)*num_righe);
-                        server.Write(appelli,sizeof(appelli)*num_righe);
+                        AppelloPrenotato *appelli=new AppelloPrenotato[num_righe];
+                        server.Write(&risposta_server, sizeof(risposta_server));
+                        client.Read(appelli,sizeof(AppelloPrenotato)*num_righe);
+                        server.Write(appelli,sizeof(AppelloPrenotato)*num_righe);
                         delete[] appelli;
                     }
                     else{
