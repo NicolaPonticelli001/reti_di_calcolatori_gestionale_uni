@@ -80,6 +80,12 @@ int ServerSocket::Accept_Client(int socket_fd,struct sockaddr_in *connected_clie
     return connection_fd;
 }
 
+void ServerSocket::changePort(int portToHost){
+    port=portToHost;
+    me.sin_port=htons(port);
+    cout<<"(ServerSocket: porta di host aggiornata con successo: "<<port<<")"<<endl;
+}
+
 //Metodo che chiude il file descriptor di ascolto
 void ServerSocket::closeListening(){
     cout<<"(ServerSocket: chiusura dell'ascolto)"<<endl;

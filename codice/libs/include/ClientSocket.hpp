@@ -20,6 +20,7 @@ class ClientSocket: protected SocketCommunication{
         int Connect();
         int Connect(int fd,const struct sockaddr_in server);
         void changeServerIP(std::string newIP);
+        void changeServerPort(int portToConnect);
         void disconnect();
         ssize_t Read(void *buff,size_t n_bytes);
         ssize_t Write(const void *buff,size_t n_bytes);

@@ -52,6 +52,12 @@ void ClientSocket::changeServerIP(string newIP){
     cout<<"(ClientSocket: IP aggiornato con successo: "<<this->server_IP<<":"<<this->port<<")"<<endl;
 }
 
+void ClientSocket::changeServerPort(int portToConnect){
+    port=portToConnect;
+    serverToConnect.sin_port=htons(portToConnect);
+    cout<<"(ClientSocket: porta aggiornata con successo: "<<this->server_IP<<":"<<this->port<<")"<<endl;
+}
+
 //Metodo che chiude il file descriptor della socket
 void ClientSocket::disconnect(){
     cout<<"(ClientSocket: chiusura connessione dal client)"<<endl;

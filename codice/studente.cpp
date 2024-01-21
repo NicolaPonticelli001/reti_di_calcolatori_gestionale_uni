@@ -7,7 +7,7 @@ using namespace std;
 
 void printAppelli(AppelloDisponibile *appelli,int num_righe);
 void printAppelli(AppelloPrenotato *appelli,int num_righe);
-void printEsami(EsameDisponibile *esami,int num_righe);
+void printEsami(Esame *esami,int num_righe);
 void printCorsi(Corso *corsi,int num_righe);
 
 int main(){
@@ -101,7 +101,6 @@ int main(){
                 cin>>corso;
                 //Riempimento dei campi del pacchetto di richiesta al fine di poterla gestire
                 richiesta.request=VIEW_ESAMI;
-                richiesta.data[MATRICOLA_STUDENTE]=matricola;
                 richiesta.data[CORSO]=corso;
                 client.Write(&richiesta,sizeof(richiesta)); //Invio richiesta al server
                 client.Read(&risposta,sizeof(risposta));
@@ -111,8 +110,8 @@ int main(){
                     int num_righe=risposta.data[RIGHE_QUERY];
                     if(num_righe!=0){   //Ci sono esami disponibili per il corso scelto
                         cout << "Righe: " << num_righe << endl;
-                        EsameDisponibile *esami=new EsameDisponibile[num_righe];
-                        client.Read(esami,sizeof(EsameDisponibile)*num_righe);
+                        Esame *esami=new Esame[num_righe];
+                        client.Read(esami,sizeof(Esame)*num_righe);
                         cout<<"Appelli disponibili per l'esame "<<corso<<":"<<endl;
                         printEsami(esami,num_righe);
                         delete[] esami;
@@ -245,7 +244,7 @@ void printAppelli(AppelloPrenotato *appelli,int num_righe){
     }
 }
 
-void printEsami(EsameDisponibile *esami,int num_righe){
+void printEsami(Esame *esami,int num_righe){
 
 }
 

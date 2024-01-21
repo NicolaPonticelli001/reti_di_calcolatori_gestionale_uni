@@ -25,6 +25,7 @@ class ServerSocket: protected SocketCommunication{
         int Accept_NoClient(int socket_fd);
         int Accept_Client();
         int Accept_Client(int socket_fd,struct sockaddr_in *connected_client,socklen_t *client_lenght);
+        void changePort(int portToHost);
         void closeListening();
         void closeServer();
         ssize_t Read(void *buff,size_t n_bytes);
