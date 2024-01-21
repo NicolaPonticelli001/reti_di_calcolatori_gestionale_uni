@@ -63,13 +63,15 @@ int main(){
         cin>>scelta;
         switch(scelta){
             case 1:{
-                Packet richiesta,risposta;
+                client.clientSetup();
+                struct Packet richiesta,risposta;
                 int corso,esame;
-                client.Connect();   //Connessione al server
 
                 richiesta.request=VIEW_CORSI;
+                client.Connect();
                 client.Write(&richiesta,sizeof(richiesta)); //Invio richiesta al server
                 client.Read(&risposta,sizeof(risposta));
+                
                 if(risposta.error.getCode()==OK){
                     int num_righe=risposta.data[RIGHE_QUERY];
                     if(num_righe!=0){
@@ -102,8 +104,10 @@ int main(){
                 //Riempimento dei campi del pacchetto di richiesta al fine di poterla gestire
                 richiesta.request=VIEW_ESAMI;
                 richiesta.data[CORSO]=corso;
+                client.Connect();
                 client.Write(&richiesta,sizeof(richiesta)); //Invio richiesta al server
                 client.Read(&risposta,sizeof(risposta));
+
                 if(risposta.error.getCode()==OK){    //Nessun errore
 
                     //2)Ottenimento esami
@@ -122,6 +126,7 @@ int main(){
                         richiesta.request=VIEW_APP;
                         richiesta.data[MATRICOLA_STUDENTE]=matricola;
                         richiesta.data[ESAME]=esame;
+                        client.Connect();
                         client.Write(&richiesta,sizeof(richiesta));
                         client.Read(&risposta,sizeof(risposta));
                         if(risposta.error.getCode()==OK){

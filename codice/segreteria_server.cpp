@@ -22,7 +22,7 @@ int main(){
             
             struct Packet richiesta;
             server.Read((void *)&richiesta,sizeof(richiesta));
-            
+            cout<<"Ricevuta la richiesta: "<<richiesta.request<<endl;
             switch(richiesta.request){
                 case LOGIN:{
                     Packet richiesta_autenticazione=richiesta;
