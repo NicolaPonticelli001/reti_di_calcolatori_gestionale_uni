@@ -66,11 +66,11 @@ int main() {
                     break;
                 
                 case VIEW_CORSI:
-                    void viewCorsi(struct Packet packet, ServerSocket server);
+                    viewCorsi(packet, server);
                     break;
                 
                 case VIEW_ESAMI:
-                    void viewEsami(struct Packet packet, ServerSocket server);
+                    viewEsami(packet, server);
                     break;
 
                 case VIEW_APP:
@@ -173,7 +173,8 @@ void insertEsame(struct Packet packet, ServerSocket server) {
     cout << endl;
 
     /* Inserimento nel DB dell'appello */
-    sql = "INSERT INTO Esami (CodiceCorso, Tipo, Modalita, Descrizione) VALUES ('"
+    sql = "INSERT INTO Esami (CodiceEsame, CodiceCorso, Tipo, Modalita, Descrizione) VALUES ('"
+        + to_string(esame_input.codiceEsame) + "', '"
         + to_string(esame_input.codiceCorso) + "', '"
         + esame_input.tipo + "', '"
         + esame_input.modalita + "', '"
@@ -211,7 +212,8 @@ void insertAppelloAction(struct Packet packet, ServerSocket server) {
     cout << endl;
 
     /* Inserimento nel DB dell'appello */
-    sql = "INSERT INTO appelli (CodiceEsame,Data) VALUES ('"
+    sql = "INSERT INTO appelli (CodiceAppello, CodiceEsame, Data) VALUES ('"
+        + to_string(appello_input.codiceAppello) + "', '"
         + to_string(appello_input.codiceEsame) + "', '"
         + formatDate(appello_input.data) + "');";
     dbms.insert(sql, &error);
@@ -253,8 +255,9 @@ void insertPrenotazioneAction(struct Packet packet, ServerSocket server) {
     if (error.getCode() == OK) {    // Errore che riguarda la select al DB
         /* Preparazione numero progressivo da associare alla matricola */
         number = stoi(table->at(0).at("MaxNumero")) + 1;
+        packet.data[GENERIC_DATA] = number;
         cout << "Numero progressivo dell'ultimo prenotato: " << number - 1 << endl;
-        cout << "Nuovo numero progressivo generato: " << number << endl;
+        cout << "Nuovo numero progressivo generato: " << packet.data[GENERIC_DATA] << endl;
 
         /* Inserimento della prenotazione */
         sql = "INSERT INTO prenotazioni VALUES ('"
@@ -294,6 +297,16 @@ void viewCorsi(struct Packet packet, ServerSocket server) {
     /* Ottenimento dei corsi salvati nel DB */
     sql = "SELECT CodiceCorso AS Codice, Nome, CFU FROM corsi";
     table = dbms.select(sql, &error);
+
+    error.printError();
+    cout << "Stampa vettore di mappe" << endl;
+    for (unsigned int i = 0; i < table->size(); i++) {
+        map<string, string> row = table->at(i);
+        for (map<string, string>::iterator j = row.begin(); j != row.end(); j++) {
+            cout << j->first << ": " << j->second << endl;
+        }
+        cout << endl;
+    }
 
     if (error.getCode() == OK) {    // Errore che riguarda la select al DB
         /* Preparazione tabella da inviare alla segreteria */
@@ -349,7 +362,7 @@ void viewEsami(struct Packet packet, ServerSocket server) {
         return;
     }
 
-    /* Ottenimento dei corsi salvati nel DB */
+    /* Ottenimento degli esami salvati nel DB */
     sql = "SELECT CodiceEsame AS Codice, Tipo, Modalita, Descrizione FROM esami WHERE CodiceCorso = '" + to_string(packet.data[CORSO]) + "'";
     table = dbms.select(sql, &error);
 

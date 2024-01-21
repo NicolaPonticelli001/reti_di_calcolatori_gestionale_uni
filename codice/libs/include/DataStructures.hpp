@@ -61,7 +61,7 @@ class Error {
 struct Packet{
     RequestType request = LOGIN;
     Error error;
-    int data[5];
+    int data[6];
 };
 
 //Stutture utilizzate per le tabelle

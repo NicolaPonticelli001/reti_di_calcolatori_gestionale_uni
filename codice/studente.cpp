@@ -78,12 +78,13 @@ int main(){
                         cout << "Righe: " << num_righe << endl;
                         Corso *corsi=new Corso[num_righe];
                         client.Read(corsi,sizeof(Corso)*num_righe);
-                        cout<<"Appelli disponibili per l'esame "<<corso<<":"<<endl;
                         printCorsi(corsi,num_righe);
                         delete[] corsi;
+                        client.disconnect();
                     }
                     else{
                         cout<<"Nessun corso disponibile"<<endl;
+                        break;
                     }
                 }
                 else{
@@ -104,6 +105,7 @@ int main(){
                 //Riempimento dei campi del pacchetto di richiesta al fine di poterla gestire
                 richiesta.request=VIEW_ESAMI;
                 richiesta.data[CORSO]=corso;
+                client.clientSetup();
                 client.Connect();
                 client.Write(&richiesta,sizeof(richiesta)); //Invio richiesta al server
                 client.Read(&risposta,sizeof(risposta));
@@ -116,9 +118,10 @@ int main(){
                         cout << "Righe: " << num_righe << endl;
                         Esame *esami=new Esame[num_righe];
                         client.Read(esami,sizeof(Esame)*num_righe);
-                        cout<<"Appelli disponibili per l'esame "<<corso<<":"<<endl;
+                        cout<<"Esami disponibili per il corso "<<richiesta.data[CORSO]<<":"<<endl;
                         printEsami(esami,num_righe);
                         delete[] esami;
+                        client.disconnect();
 
                         //3)Selezionare l'esame
                         cout<<"Inserisci l'esame di cui vuoi vedere gli appelli"<<endl;
@@ -126,6 +129,7 @@ int main(){
                         richiesta.request=VIEW_APP;
                         richiesta.data[MATRICOLA_STUDENTE]=matricola;
                         richiesta.data[ESAME]=esame;
+                        client.clientSetup();
                         client.Connect();
                         client.Write(&richiesta,sizeof(richiesta));
                         client.Read(&risposta,sizeof(risposta));
@@ -250,9 +254,20 @@ void printAppelli(AppelloPrenotato *appelli,int num_righe){
 }
 
 void printEsami(Esame *esami,int num_righe){
-
+    for(int i=0;i<num_righe;i++){
+        cout<<"Codice esame: "<<esami[i].codiceEsame<<endl;
+        cout<<"Tipo: "<<esami[i].tipo<<endl;
+        cout<<"Modalita: "<<esami[i].modalita<<endl;
+        cout<<"Descrizione': "<<esami[i].descrizione<<endl;
+        cout<<endl;
+    }
 }
 
 void printCorsi(Corso *corsi,int num_righe){
-
+    for(int i=0;i<num_righe;i++){
+        cout<<"Codice corso: "<<corsi[i].codiceCorso<<endl;
+        cout<<"Nome: "<<corsi[i].nome<<endl;
+        cout<<"CFU: "<<corsi[i].CFU<<endl;
+        cout<<endl;
+    }
 }

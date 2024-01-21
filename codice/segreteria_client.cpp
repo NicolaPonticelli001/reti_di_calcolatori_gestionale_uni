@@ -13,6 +13,7 @@ int main(){
         cout<<"1)Aggiungi un nuovo appello"<<endl;
         cout<<"2)Aggiungi un nuovo esame"<<endl;
         cout<<"0)Esci"<<endl;
+
         cin>>scelta;
         cout<<endl;
         switch(scelta){
@@ -24,6 +25,8 @@ int main(){
                 client.clientSetup();   //Inizializzazione dati per la comunicazione
                 
                 //Raccolta dati appello da inserire
+                cout<<"Inserisci il codice dell'appello: ";
+                cin>>appello.codiceAppello;
                 cout<<"Inserisci il codice dell'esame: ";
                 cin>>appello.codiceEsame;
                 cout<<"Inserisci la data formato 'GG-MM-AAAA': ";
@@ -61,6 +64,8 @@ int main(){
                 client.clientSetup();   //Inizializzazione dati per la comunicazione
                 
                 //Raccolta dati esame da inserire
+                cout<<"Inserisci il codice dell'esame: ";
+                cin>>esame.codiceEsame;
                 cout<<"Inserisci il corso a cui è associato l'esame: ";
                 cin>>esame.codiceCorso;
                 cout<<"Inserisci il tipo di esame ('prova' -> 0,'esame' -> 1): ";
@@ -83,7 +88,8 @@ int main(){
                     esame.modalita[7]='\0';
                 }
                 cout<<"Inserisci la descrizione (default: vuota): ";
-                cin>>descrizione;
+                getline(cin, descrizione);  // Pulizia buffer di input
+                getline(cin, descrizione);
                 if(descrizione.length()-1==0){
                     esame.descrizione[0] = '\0';
                 }

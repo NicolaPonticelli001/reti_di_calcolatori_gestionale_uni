@@ -49,17 +49,16 @@ int main(){
                 case PREN_STUD:{
                     ClientSocket client=ClientSocket("127.0.0.1",UNI_SERVER_PORT);
                     client.clientSetup();
-                    Packet richiesta_prentoazione=richiesta,risposta_prenotazione,risposta;
+                    Packet risposta;
                     client.Connect();
-                    client.Write(&richiesta_prentoazione,sizeof(richiesta_prentoazione));
-                    client.Read(&risposta_prenotazione,sizeof(risposta_prenotazione));
+                    client.Write(&richiesta,sizeof(richiesta));
+                    client.Read((void*)&risposta,sizeof(risposta));
                     client.disconnect();
-                    if(risposta_prenotazione.error.getCode()==OK){
+                    if(risposta.error.getCode()==OK){
                         cout<<"Prenotazione effettuata con successo"<<endl;
-                        cout<<"Studente "<<richiesta_prentoazione.data[MATRICOLA_STUDENTE]<<"-#"<<risposta_prenotazione.data[GENERIC_DATA]<<endl;
-                        risposta=risposta_prenotazione;
-                        server.Write(&risposta,sizeof(risposta));
+                        cout<<"Studente "<<richiesta.data[MATRICOLA_STUDENTE]<<"-#"<<risposta.data[GENERIC_DATA]<<endl;
                     }
+                    server.Write(&risposta,sizeof(risposta));
                     break;
                 }
                 case VIEW_CORSI:{
@@ -76,8 +75,10 @@ int main(){
                         server.Write(&risposta_server,sizeof(risposta_server));
                         if(num_righe!=0){
                             Corso *corsi = new Corso[num_righe];
-                            client.Read(corsi,sizeof(corsi)*num_righe);
-                            server.Write(corsi,sizeof(corsi)*num_righe);
+                            cout << "Prima di read" << endl;
+                            client.Read(corsi,sizeof(Corso)*num_righe);
+                            cout << "Dopo read" << endl;
+                            server.Write(corsi,sizeof(Corso)*num_righe);
                             delete[] corsi;
                         }
                     }
@@ -102,8 +103,8 @@ int main(){
                         server.Write(&risposta_server,sizeof(risposta_server));
                         if(num_righe!=0){
                             Esame *esami = new Esame[num_righe];
-                            client.Read(esami,sizeof(esami)*num_righe);
-                            server.Write(esami,sizeof(esami)*num_righe);
+                            client.Read(esami,sizeof(Esame)*num_righe);
+                            server.Write(esami,sizeof(Esame)*num_righe);
                             delete[] esami;
                         }
                     }
