@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-01-18T19:58:44.958Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.199 Electron/28.1.2 Safari/537.36" etag="KsF1R1rItN1CeGl0KRvi" version="22.1.18" type="device">
+<mxfile host="Electron" modified="2024-01-21T00:12:12.065Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.18 Chrome/120.0.6099.199 Electron/28.1.2 Safari/537.36" etag="B2xtKxJyeFy6qp2ytAGZ" version="22.1.18" type="device">
   <diagram name="Pagina-1" id="-4l7BPa5b6d8UpFndVd6">
-    <mxGraphModel dx="2431" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3827" dy="1797" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -137,33 +137,33 @@
           <mxGeometry x="1178" y="70" width="125" height="50" as="geometry" />
         </mxCell>
         <mxCell id="qpu88ibbBHQJC-O9vi6A-49" value="Server" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fontSize=14;" parent="1" vertex="1">
-          <mxGeometry x="136" y="825" width="60" height="80" as="geometry" />
+          <mxGeometry x="-174" y="905" width="60" height="80" as="geometry" />
         </mxCell>
         <mxCell id="qpu88ibbBHQJC-O9vi6A-50" value="Segreteria" style="ellipse;rounded=0;whiteSpace=wrap;html=1;fontSize=14;perimeter=rectanglePerimeter;" parent="1" vertex="1">
-          <mxGeometry x="100" y="680" width="120" height="60" as="geometry" />
+          <mxGeometry x="-210" y="760" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="qpu88ibbBHQJC-O9vi6A-51" value="Studente" style="rounded=0;whiteSpace=wrap;html=1;fontSize=14;" parent="1" vertex="1">
-          <mxGeometry x="350" y="740" width="120" height="60" as="geometry" />
+          <mxGeometry x="40" y="820" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="qpu88ibbBHQJC-O9vi6A-58" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" parent="1" source="qpu88ibbBHQJC-O9vi6A-51" target="qpu88ibbBHQJC-O9vi6A-50" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="410" y="720" as="sourcePoint" />
-            <mxPoint x="460" y="670" as="targetPoint" />
+            <mxPoint x="100" y="800" as="sourcePoint" />
+            <mxPoint x="150" y="750" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="qpu88ibbBHQJC-O9vi6A-62" value="&lt;ul style=&quot;font-size: 14px;&quot;&gt;&lt;li style=&quot;font-size: 14px;&quot;&gt;Chiede alla segreteria se ci siano esami disponibili per un corso&lt;/li&gt;&lt;li style=&quot;font-size: 14px;&quot;&gt;Invia una richiesta di prenotazione di un esame alla segreteria e&lt;br style=&quot;font-size: 14px;&quot;&gt;riceve il proprio numero progressivo&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;" parent="1" vertex="1">
-          <mxGeometry x="270" y="800" width="460" height="90" as="geometry" />
+          <mxGeometry x="-40" y="880" width="460" height="90" as="geometry" />
         </mxCell>
         <mxCell id="qpu88ibbBHQJC-O9vi6A-64" value="&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;ul style=&quot;font-size: 14px;&quot;&gt;&lt;li style=&quot;font-size: 14px;&quot;&gt;Inserisce gli esami sul server dell&#39;università&lt;/li&gt;&lt;li style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;Inoltra la richiesta di prenotazione degli studenti al server universitario e&lt;br style=&quot;font-size: 14px;&quot;&gt;inoltra al prenotato il suo numero progressivo&lt;/span&gt;&lt;/li&gt;&lt;li style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;Fornisce allo studente le date degli esami disponibili per l&#39;esame scelto&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;" parent="1" vertex="1">
-          <mxGeometry x="50" y="570" width="510" height="110" as="geometry" />
+          <mxGeometry x="-260" y="650" width="510" height="110" as="geometry" />
         </mxCell>
         <mxCell id="qpu88ibbBHQJC-O9vi6A-65" value="&lt;ul style=&quot;font-size: 14px;&quot;&gt;&lt;li style=&quot;font-size: 14px;&quot;&gt;Riceve l&#39;aggiunta di nuovi esami&lt;/li&gt;&lt;li style=&quot;font-size: 14px;&quot;&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;Riceve la prenotazione di un esame e&lt;br&gt;invia il numero progressivo del prenotato&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;spacingTop=0;spacing=2;" parent="1" vertex="1">
-          <mxGeometry x="85" y="900" width="320" height="90" as="geometry" />
+          <mxGeometry x="-225" y="980" width="320" height="90" as="geometry" />
         </mxCell>
         <mxCell id="qpu88ibbBHQJC-O9vi6A-68" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0.553;exitY=1.053;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="qpu88ibbBHQJC-O9vi6A-50" target="qpu88ibbBHQJC-O9vi6A-49" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="260" y="720" as="sourcePoint" />
-            <mxPoint x="310" y="670" as="targetPoint" />
+            <mxPoint x="-50" y="800" as="sourcePoint" />
+            <mxPoint y="750" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="qpu88ibbBHQJC-O9vi6A-69" value="SEZIONE DATI" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;" parent="1" vertex="1">
@@ -325,9 +325,6 @@
         </mxCell>
         <mxCell id="qpu88ibbBHQJC-O9vi6A-144" value="tinyint" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="1420" y="795" width="70" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="viH-sDnQo9kFJBy7o8TC-1" value="Thread" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;" parent="1" vertex="1">
-          <mxGeometry x="60" y="850" width="70" height="30" as="geometry" />
         </mxCell>
         <mxCell id="0l1mAVOR_yaePjFmdClw-1" value="SEZIONE OPERAZIONI SU DATABASE" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="1325" y="1169" width="380" height="40" as="geometry" />

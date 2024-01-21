@@ -23,7 +23,7 @@ private:
      * @param table_result Puntatore del vettore all'interno del quale salvare salvare i risultati della query
      * sottoforma di map<string, string>
      */
-    void createMapResults (vector< map<string, string> > *table_result, sqlite3_stmt*, Error* = nullptr);
+    void createMapResults (vector< map<string, string> > *table_result, sqlite3_stmt *statement, Error *error = nullptr);
 
     /**
      * @brief Wrapper per i metodi della libreria sqlite.h che permettono di eseguire l'effettiva query sul database
