@@ -17,8 +17,11 @@ using namespace std;
 string formatDate(string date);
 
 void loginAction(struct Packet packet, ServerSocket server);
+void insertEsame(struct Packet packet, ServerSocket server);
 void insertAppelloAction(struct Packet packet, ServerSocket server);
 void insertPrenotazioneAction(struct Packet packet, ServerSocket server);
+void viewCorsi(struct Packet packet, ServerSocket server);
+void viewEsami(struct Packet packet, ServerSocket server);
 void viewAppelli(struct Packet packet, ServerSocket server);
 void viewAppelliPrenotati(struct Packet packet, ServerSocket server);
 
@@ -50,6 +53,10 @@ int main() {
                     loginAction(packet, server);
                     break;
                 
+                case INS_ESAME:
+                    insertEsame(packet, server);
+                    break;
+
                 case INS_APPELLO:
                     insertAppelloAction(packet, server);
                     break;
@@ -58,6 +65,14 @@ int main() {
                     insertPrenotazioneAction(packet, server);
                     break;
                 
+                case VIEW_CORSI:
+                    void viewCorsi(struct Packet packet, ServerSocket server);
+                    break;
+                
+                case VIEW_ESAMI:
+                    void viewEsami(struct Packet packet, ServerSocket server);
+                    break;
+
                 case VIEW_APP:
                     viewAppelli(packet, server);
                     break;
@@ -134,6 +149,46 @@ void loginAction(struct Packet packet, ServerSocket server) {
     delete(table);
 }
 
+void insertEsame(struct Packet packet, ServerSocket server) {
+    Error error = Error(OK, "", "");    // Oggetto usato per tutti gli errori possibili
+    DBMS dbms = DBMS(DB_FILE_NAME, &error); // Connessione al DB
+    string sql = "";
+    struct Esame esame_input;
+
+    /* Errore che riguarda la connessione al DB*/
+    if (error.getCode() != OK) {
+        error.printError();
+        packet.error = error;
+        server.Write((void*)&packet, sizeof(packet));
+        return;
+    }
+
+    // Legge i dati dell'appello
+    server.Read((void*)&esame_input, sizeof(esame_input));
+    cout << "Ecco i campi della struct Appello ricevuti" << endl;
+    cout << "Codice corso: " << esame_input.codiceCorso << endl;
+    cout << "Tipo: " << esame_input.tipo << endl;
+    cout << "Modalita: " << esame_input.modalita << endl;
+    cout << "Descrizione: " << esame_input.descrizione << endl;
+    cout << endl;
+
+    /* Inserimento nel DB dell'appello */
+    sql = "INSERT INTO Esami (CodiceCorso, Tipo, Modalita, Descrizione) VALUES ('"
+        + to_string(esame_input.codiceCorso) + "', '"
+        + esame_input.tipo + "', '"
+        + esame_input.modalita + "', '"
+        + esame_input.descrizione + "')";
+    dbms.insert(sql, &error);
+
+    /* Errore che riguarda la insert nel DB */
+    if (error.getCode() != OK) error.printError();
+    else cout << "Insert nel database andata a buon fine, esame inserito" << endl;
+
+    /* Invio dati con errore (se l'errore non c'è allora sarà impostato a "OK") */
+    packet.error = error;
+    server.Write((void*)&packet, sizeof(packet));
+}
+
 void insertAppelloAction(struct Packet packet, ServerSocket server) {
     Error error = Error(OK, "", "");    // Oggetto usato per tutti gli errori possibili
     DBMS dbms = DBMS(DB_FILE_NAME, &error); // Connessione al DB
@@ -151,21 +206,19 @@ void insertAppelloAction(struct Packet packet, ServerSocket server) {
     // Legge i dati dell'appello
     server.Read((void*)&appello_input, sizeof(appello_input));
     cout << "Ecco i campi della struct Appello ricevuti" << endl;
-    cout << "Codice appello: " << appello_input.codiceAppello << endl;
     cout << "Codice esame: " << appello_input.codiceEsame << endl;
     cout << "Data: " << appello_input.data << endl;
     cout << endl;
 
     /* Inserimento nel DB dell'appello */
-    sql = "INSERT INTO appelli (CodiceAppello,CodiceEsame,Data) VALUES ('"
-        + to_string(appello_input.codiceAppello) + "', '"
+    sql = "INSERT INTO appelli (CodiceEsame,Data) VALUES ('"
         + to_string(appello_input.codiceEsame) + "', '"
         + formatDate(appello_input.data) + "');";
     dbms.insert(sql, &error);
 
     /* Errore che riguarda la insert nel DB */
     if (error.getCode() != OK) error.printError();
-    else cout << "Insert nel database andata a buon fine, appello inserito" << endl;
+    else cout << "Inserimento andato a buon fine" << endl;
 
     /* Invio dati con errore (se l'errore non c'è allora sarà impostato a "OK") */
     packet.error = error;
@@ -222,6 +275,120 @@ void insertPrenotazioneAction(struct Packet packet, ServerSocket server) {
     delete(table);
 }
 
+void viewCorsi(struct Packet packet, ServerSocket server) {
+    Error error = Error(OK, "", "");    // Oggetto usato per tutti gli errori possibili
+    DBMS dbms = DBMS(DB_FILE_NAME, &error); // Connessione al DB
+    string sql = "";
+    vector< map<string, string> > *table = nullptr;
+    struct Corso *corsi;
+
+    /* Errore che riguarda la connessione al DB*/
+    if (error.getCode() != OK) {
+        error.printError();
+        packet.error = error;
+        server.Write((void*)&packet, sizeof(packet));
+        delete(table);
+        return;
+    }
+
+    /* Ottenimento dei corsi salvati nel DB */
+    sql = "SELECT CodiceCorso AS Codice, Nome, CFU FROM corsi";
+    table = dbms.select(sql, &error);
+
+    if (error.getCode() == OK) {    // Errore che riguarda la select al DB
+        /* Preparazione tabella da inviare alla segreteria */
+        corsi = (struct Corso*)malloc(sizeof(struct Corso) * table->size());
+        cout << "Righe restituite: " << table->size() << endl;
+        cout << endl;
+        /* Salvataggio dati all'interno dell'array da inviare alla segreteria*/
+        for (unsigned int i = 0; i < table->size(); i++) {
+            map<string, string> row = table->at(i);
+            corsi[i].codiceCorso = stoi(row.at("Codice"));
+            strcpy(corsi[i].nome, row.at("Nome").c_str());
+            corsi[i].CFU = stoi(row.at("CFU"));
+
+            cout << "Codice corso: " << corsi[i].codiceCorso << endl;
+            cout << "Nome: " << corsi[i].nome << endl;
+            cout << "CFU: " << corsi[i].CFU << endl;
+            cout << "----- ----- ----- -----" << endl;
+        }
+
+        /* Invio dati + errore (impostato a "OK" se è andato tutto a buon fine)*/
+        packet.error = error;
+        packet.data[RIGHE_QUERY] = table->size();
+        server.Write((void*)&packet, sizeof(packet));   // Invio numero di righe (per preparare la dimensione del buffer)
+        server.Write((void*)corsi, sizeof(struct Corso) * table->size());    // Invio effettivo della tabella
+    } else {
+        /* Errore che riuarda la select al DB */
+        packet.error = error;
+        error.printError();
+        server.Write((void*)&packet, sizeof(packet));
+    }
+
+    delete(table);
+    free(corsi);
+}
+
+void viewEsami(struct Packet packet, ServerSocket server) {
+    Error error = Error(OK, "", "");    // Oggetto usato per tutti gli errori possibili
+    DBMS dbms = DBMS(DB_FILE_NAME, &error); // Connessione al DB
+    string sql = "";
+    vector< map<string, string> > *table = nullptr;
+    struct Esame *esami;
+
+    cout << "Dati ricevuti" << endl;
+    cout << "Corso: " << packet.data[CORSO] << endl;
+    cout << endl;
+
+    /* Errore che riguarda la connessione al DB*/
+    if (error.getCode() != OK) {
+        error.printError();
+        packet.error = error;
+        server.Write((void*)&packet, sizeof(packet));
+        delete(table);
+        return;
+    }
+
+    /* Ottenimento dei corsi salvati nel DB */
+    sql = "SELECT CodiceEsame AS Codice, Tipo, Modalita, Descrizione FROM esami WHERE CodiceCorso = '" + to_string(packet.data[CORSO]) + "'";
+    table = dbms.select(sql, &error);
+
+    if (error.getCode() == OK) {    // Errore che riguarda la select al DB
+        /* Preparazione tabella da inviare alla segreteria */
+        esami = (struct Esame*)malloc(sizeof(struct Esame) * table->size());
+        cout << "Righe restituite: " << table->size() << endl;
+        cout << endl;
+        /* Salvataggio dati all'interno dell'array da inviare alla segreteria*/
+        for (unsigned int i = 0; i < table->size(); i++) {
+            map<string, string> row = table->at(i);
+            esami[i].codiceEsame = stoi(row.at("Codice"));
+            strcpy(esami[i].tipo, row.at("Tipo").c_str());
+            strcpy(esami[i].modalita, row.at("Modalita").c_str());
+            strcpy(esami[i].descrizione, row.at("Descrizione").c_str());
+
+            cout << "Codice esame: " << esami[i].codiceEsame << endl;
+            cout << "Tipo: " << esami[i].tipo << endl;
+            cout << "Modalita: " << esami[i].modalita << endl;
+            cout << "Descrizione: " << esami[i].descrizione << endl;
+            cout << "----- ----- ----- -----" << endl;
+        }
+
+        /* Invio dati + errore (impostato a "OK" se è andato tutto a buon fine)*/
+        packet.error = error;
+        packet.data[RIGHE_QUERY] = table->size();
+        server.Write((void*)&packet, sizeof(packet));   // Invio numero di righe (per preparare la dimensione del buffer)
+        server.Write((void*)esami, sizeof(struct Esame) * table->size());    // Invio effettivo della tabella
+    } else {
+        /* Errore che riuarda la select al DB */
+        packet.error = error;
+        error.printError();
+        server.Write((void*)&packet, sizeof(packet));
+    }
+
+    delete(table);
+    free(esami);
+}
+
 void viewAppelli(struct Packet packet, ServerSocket server) {
     Error error = Error(OK, "", "");    // Oggetto usato per tutti gli errori possibili
     DBMS dbms = DBMS(DB_FILE_NAME, &error); // Connessione al DB
@@ -229,7 +396,9 @@ void viewAppelli(struct Packet packet, ServerSocket server) {
     vector< map<string, string> > *table = nullptr;
     struct AppelloDisponibile *appelli; // Array che conterrà tutti i vari appelli
 
-    cout << "Matricola ricevuta: " << packet.data[MATRICOLA_STUDENTE] << endl;
+    cout << "Dati ricevuti" << endl;
+    cout << "Matricola: " << packet.data[MATRICOLA_STUDENTE] << endl;
+    cout << "Codice corso: " << packet.data[ESAME] << endl;
     cout << endl;
 
     /* Errore che riguarda la connessione al DB */
@@ -248,7 +417,8 @@ void viewAppelli(struct Packet packet, ServerSocket server) {
         WHERE NOT EXISTS (SELECT prenotazioni.CodiceAppello\
             FROM prenotazioni\
             WHERE prenotazioni.Studente = '" + to_string(packet.data[MATRICOLA_STUDENTE]) + "'\
-            AND prenotazioni.CodiceAppello=appelli.CodiceAppello)";
+            AND prenotazioni.CodiceAppello=appelli.CodiceAppello)\
+        AND corsi.CodiceCorso = '" + to_string(packet.data[CORSO]) + "'";
     table = dbms.select(sql, &error);
 
     if (error.getCode() == OK) {    // Errore che riguarda la select al DB
