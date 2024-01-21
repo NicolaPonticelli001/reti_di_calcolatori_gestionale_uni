@@ -70,6 +70,14 @@ struct Appello{                 //struct di input
     char data[17];
 };
 
+struct Esame{                   //struct di input/output
+    int codiceEsame;
+    int codiceCorso;
+    char tipo[6];
+    char modalita[8];
+    char descrizione[501];
+};
+
 struct AppelloPrenotato{        //struct di output
     int codice;
     char data[17];
@@ -86,12 +94,10 @@ struct AppelloDisponibile{      //struct di output
     char nome[51];
 };
 
-struct EsameDisponibile{        //struct di output
-
-};
-
-struct Corsi{
-
+struct Corso{                   //struct di output
+    int codiceCorso;
+    char nome[51];
+    short int CFU;
 };
 
 #endif

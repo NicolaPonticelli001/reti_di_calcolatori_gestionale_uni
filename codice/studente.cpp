@@ -8,7 +8,7 @@ using namespace std;
 void printAppelli(AppelloDisponibile *appelli,int num_righe);
 void printAppelli(AppelloPrenotato *appelli,int num_righe);
 void printEsami(EsameDisponibile *esami,int num_righe);
-void printCorsi(Corsi *corsi,int num_righe);
+void printCorsi(Corso *corsi,int num_righe);
 
 int main(){
     string ip="127.0.0.1";
@@ -72,12 +72,17 @@ int main(){
                 client.Read(&risposta,sizeof(risposta));
                 if(risposta.error.getCode()==OK){
                     int num_righe=risposta.data[RIGHE_QUERY];
-                    cout << "Righe: " << num_righe << endl;
-                    Corsi *corsi=new Corsi[num_righe];
-                    client.Read(corsi,sizeof(EsameDisponibile)*num_righe);
-                    cout<<"Appelli disponibili per l'esame "<<corso<<":"<<endl;
-                    printCorsi(corsi,num_righe);
-                    delete[] corsi;
+                    if(num_righe!=0){
+                        cout << "Righe: " << num_righe << endl;
+                        Corso *corsi=new Corso[num_righe];
+                        client.Read(corsi,sizeof(Corso)*num_righe);
+                        cout<<"Appelli disponibili per l'esame "<<corso<<":"<<endl;
+                        printCorsi(corsi,num_righe);
+                        delete[] corsi;
+                    }
+                    else{
+                        cout<<"Nessun corso disponibile"<<endl;
+                    }
                 }
                 else{
                     cout<<"Errore nel caricamento dei corsi"<<endl;
@@ -101,6 +106,7 @@ int main(){
                 client.Write(&richiesta,sizeof(richiesta)); //Invio richiesta al server
                 client.Read(&risposta,sizeof(risposta));
                 if(risposta.error.getCode()==OK){    //Nessun errore
+
                     //2)Ottenimento esami
                     int num_righe=risposta.data[RIGHE_QUERY];
                     if(num_righe!=0){   //Ci sono esami disponibili per il corso scelto
@@ -181,12 +187,17 @@ int main(){
                 if(risposta.error.getCode()==OK){
                     //Elaborazione appelli
                     int num_righe=risposta.data[RIGHE_QUERY];
-                    cout << "Righe: " << num_righe << endl;
-                    AppelloPrenotato *appelli=new AppelloPrenotato[num_righe];
-                    client.Read(appelli,sizeof(AppelloPrenotato)*num_righe);
-                    cout<<"Appelli disponibili:"<<endl;
-                    printAppelli(appelli,num_righe);
-                    delete[] appelli;
+                    if(num_righe!=0){
+                        cout << "Righe: " << num_righe << endl;
+                        AppelloPrenotato *appelli=new AppelloPrenotato[num_righe];
+                        client.Read(appelli,sizeof(AppelloPrenotato)*num_righe);
+                        cout<<"Appelli a cui sei prenotato:"<<endl;
+                        printAppelli(appelli,num_righe);
+                        delete[] appelli;
+                    }
+                    else{
+                        cout<<"Nessuna prenotazione registrata"<<endl;
+                    }
                 }
                 else{
                     cout<<"Errore nel caricamento degli appelli"<<endl;
@@ -232,4 +243,12 @@ void printAppelli(AppelloPrenotato *appelli,int num_righe){
         cout<<"#Prenotazione: "<<appelli[i].numeroPrenotazione<<endl;
         cout<<endl;
     }
+}
+
+void printEsami(EsameDisponibile *esami,int num_righe){
+
+}
+
+void printCorsi(Corso *corsi,int num_righe){
+
 }
