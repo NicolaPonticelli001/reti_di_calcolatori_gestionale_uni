@@ -8,17 +8,21 @@ using namespace std;
 
 //Defines per accedere direttamente al campo "data" della struct "Packet"
 #define MATRICOLA_STUDENTE 0
-#define APPELLO 1
-#define RIGHE_QUERY 2
-#define GENERIC_DATA 3   //Per il numero progressivo
+#define CORSO 1
+#define ESAME 2
+#define APPELLO 3
+#define RIGHE_QUERY 4
+#define GENERIC_DATA 5   //Per il numero progressivo
 
 //Enumerazione per identificare il tipo di richiesta
 enum RequestType{
     LOGIN,          //0
     INS_APPELLO,    //1
     PREN_STUD,      //2
-    VIEW_APP,       //3
-    VIEW_APP_P      //4
+    VIEW_CORSI,     //3
+    VIEW_ESAMI,     //4
+    VIEW_APP,       //5 
+    VIEW_APP_P      //6
 };
 
 //Enumerazione per identificare il tipo di errore
@@ -56,7 +60,7 @@ class Error {
 struct Packet{
     RequestType request = LOGIN;
     Error error;
-    int data[4];
+    int data[5];
 };
 
 //Stutture utilizzate per le tabelle
@@ -80,6 +84,14 @@ struct AppelloDisponibile{      //struct di output
     int codiceAppello;
     char data[17];
     char nome[51];
+};
+
+struct EsameDisponibile{        //struct di output
+
+};
+
+struct Corsi{
+
 };
 
 #endif

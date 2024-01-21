@@ -7,6 +7,8 @@ using namespace std;
 
 void printAppelli(AppelloDisponibile *appelli,int num_righe);
 void printAppelli(AppelloPrenotato *appelli,int num_righe);
+void printEsami(EsameDisponibile *esami,int num_righe);
+void printCorsi(Corsi *corsi,int num_righe);
 
 int main(){
     string ip="127.0.0.1";
@@ -54,7 +56,7 @@ int main(){
     cout<<"Ben tornato!"<<endl;
     cout<<"Scegli cosa fare"<<endl;
     do{
-        cout<<"1)Visualizza gli appelli disponibili"<<endl;
+        cout<<"1)Visualizza gli appelli disponibili per un esame scelto"<<endl;
         cout<<"2)Prenotati ad un appello"<<endl;
         cout<<"3)Visualizza gli appelli a cui sei prenotato"<<endl;
         cout<<"0)Esci"<<endl;
@@ -62,27 +64,88 @@ int main(){
         switch(scelta){
             case 1:{
                 Packet richiesta,risposta;
-                richiesta.request=VIEW_APP;
-                richiesta.data[MATRICOLA_STUDENTE]=matricola;
-                client.clientSetup();
-                client.Connect();
-                client.Write(&richiesta,sizeof(richiesta));
-                cout<<"Richiesta VIEW_APP inviata"<<endl;
+                int corso,esame;
+                client.Connect();   //Connessione al server
+
+                richiesta.request=VIEW_CORSI;
+                client.Write(&richiesta,sizeof(richiesta)); //Invio richiesta al server
                 client.Read(&risposta,sizeof(risposta));
-                cout<<"Risposta VIEW_APP ricevuta"<<endl;
                 if(risposta.error.getCode()==OK){
-                    //Elaborazione appelli
                     int num_righe=risposta.data[RIGHE_QUERY];
-                    AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
-                    client.Read(appelli,sizeof(AppelloDisponibile)*num_righe);
-                    cout<<"Appelli disponibili:"<<endl;
-                    printAppelli(appelli,num_righe);
-                    delete[] appelli;
+                    cout << "Righe: " << num_righe << endl;
+                    Corsi *corsi=new Corsi[num_righe];
+                    client.Read(corsi,sizeof(EsameDisponibile)*num_righe);
+                    cout<<"Appelli disponibili per l'esame "<<corso<<":"<<endl;
+                    printCorsi(corsi,num_righe);
+                    delete[] corsi;
                 }
                 else{
-                    cout<<"Errore nel caricamento degli appelli"<<endl;
+                    cout<<"Errore nel caricamento dei corsi"<<endl;
+                    break;
                 }
-                cout<<endl;
+
+                /*
+                1)Selezionare il corso
+                2)Ottenimento degli esami
+                3)Selezionare l'esame
+                4)Ottenimento gli appelli per quell'esame
+                */
+
+                //1)Selezionare il corso
+                cout<<"Inserisci il codice del corso: ";
+                cin>>corso;
+                //Riempimento dei campi del pacchetto di richiesta al fine di poterla gestire
+                richiesta.request=VIEW_ESAMI;
+                richiesta.data[MATRICOLA_STUDENTE]=matricola;
+                richiesta.data[CORSO]=corso;
+                client.Write(&richiesta,sizeof(richiesta)); //Invio richiesta al server
+                client.Read(&risposta,sizeof(risposta));
+                if(risposta.error.getCode()==OK){    //Nessun errore
+                    //2)Ottenimento esami
+                    int num_righe=risposta.data[RIGHE_QUERY];
+                    if(num_righe!=0){   //Ci sono esami disponibili per il corso scelto
+                        cout << "Righe: " << num_righe << endl;
+                        EsameDisponibile *esami=new EsameDisponibile[num_righe];
+                        client.Read(esami,sizeof(EsameDisponibile)*num_righe);
+                        cout<<"Appelli disponibili per l'esame "<<corso<<":"<<endl;
+                        printEsami(esami,num_righe);
+                        delete[] esami;
+
+                        //3)Selezionare l'esame
+                        cout<<"Inserisci l'esame di cui vuoi vedere gli appelli"<<endl;
+                        cin>>esame;
+                        richiesta.request=VIEW_APP;
+                        richiesta.data[MATRICOLA_STUDENTE]=matricola;
+                        richiesta.data[ESAME]=esame;
+                        client.Write(&richiesta,sizeof(richiesta));
+                        client.Read(&risposta,sizeof(risposta));
+                        if(risposta.error.getCode()==OK){
+                            
+                            //4)Ottenimento degli appelli per l'esame scelto
+                            num_righe=risposta.data[RIGHE_QUERY];
+                            if(num_righe!=0){  //Ci sono appelli disponibili per l'esame scelto
+                                cout << "Righe: " << num_righe << endl;
+                                AppelloDisponibile *appelli=new AppelloDisponibile[num_righe];
+                                client.Read(appelli,sizeof(AppelloDisponibile)*num_righe);
+                                cout<<"Appelli disponibili:"<<endl;
+                                printAppelli(appelli,num_righe);
+                                delete[] appelli;
+                            }
+                            else{
+                                cout<<"Nessun appello disponibile per il corso scelto"<<endl;
+                            }
+                        }
+                        else{
+                            cout<<"Errore nel caricamento degli appelli"<<endl;
+                        }
+                    }
+                    else{
+                        cout<<"Nessun esame disponibile per il corso scelto"<<endl;
+                    }
+                }
+                else{
+                    cout<<"Errore nel caricamento degli esami"<<endl;
+                }
                 break;
             }
             case 2:{
