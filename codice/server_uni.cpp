@@ -431,7 +431,7 @@ void viewAppelli(struct Packet packet, ServerSocket server) {
             FROM prenotazioni\
             WHERE prenotazioni.Studente = '" + to_string(packet.data[MATRICOLA_STUDENTE]) + "'\
             AND prenotazioni.CodiceAppello=appelli.CodiceAppello)\
-        AND corsi.CodiceCorso = '" + to_string(packet.data[CORSO]) + "'";
+        AND esami.CodiceEsame = '" + to_string(packet.data[ESAME]) + "'";
     table = dbms.select(sql, &error);
 
     if (error.getCode() == OK) {    // Errore che riguarda la select al DB
