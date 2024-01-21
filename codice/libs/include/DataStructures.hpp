@@ -18,11 +18,12 @@ using namespace std;
 enum RequestType{
     LOGIN,          //0
     INS_APPELLO,    //1
-    PREN_STUD,      //2
-    VIEW_CORSI,     //3
-    VIEW_ESAMI,     //4
-    VIEW_APP,       //5 
-    VIEW_APP_P      //6
+    INS_ESAME,      //2
+    PREN_STUD,      //3
+    VIEW_CORSI,     //4
+    VIEW_ESAMI,     //5
+    VIEW_APP,       //6 
+    VIEW_APP_P      //7
 };
 
 //Enumerazione per identificare il tipo di errore

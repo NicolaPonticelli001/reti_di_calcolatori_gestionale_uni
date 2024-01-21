@@ -11,6 +11,7 @@ int main(){
     do{
         cout<<"Seleziona cosa vuoi fare"<<endl;
         cout<<"1)Aggiungi un nuovo appello"<<endl;
+        cout<<"2)Aggiung un nuovo esame"<<endl;
         cout<<"0)Esci"<<endl;
         cin>>scelta;
         cout<<endl;
