@@ -44,6 +44,7 @@ int main() {
             error.printError();
             server.Write((void*)&packet, sizeof(packet));
         } else if (pid == 0) {
+            server.closeListening();    // Chiudo la listen dell'istanza copiata nel processo figlio
             server.Read((void*)&packet, sizeof(packet));
             cout << "Pacchetto ricevuto. Codice richiesta: " << packet.request << endl << endl;
 
@@ -89,9 +90,12 @@ int main() {
             cout << endl;
             cout << "==============================" << endl;
             cout << endl;
+            exit(0);
         }
     }
 
+    server.closeListening();
+    server.closeServer();
     delete(&error);
     return 0;
 }

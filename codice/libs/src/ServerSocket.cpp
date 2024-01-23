@@ -95,7 +95,7 @@ void ServerSocket::closeListening(){
 //Metodo che chiude il file descriptor della socket
 void ServerSocket::closeServer(){
     cout<<"(ServerSocket: chiusura del server)"<<endl;
-    close(this->listen_fd);
+    close(this->connection_fd);
 }
 
 //Metodi che wrappano le system calls read() e write()
